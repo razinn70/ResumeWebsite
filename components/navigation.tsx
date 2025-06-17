@@ -127,7 +127,7 @@ export function Navigation() {
 
   // Toggle mobile menu
   const toggleMobileMenu = useCallback(() => {
-    setIsMobileMenuOpen(prev => !prev)
+    setIsMobileMenuOpen((prev: boolean) => !prev)
   }, [])
 
   // Close mobile menu on escape key
@@ -167,70 +167,113 @@ export function Navigation() {
       role="navigation"
       aria-label="Main navigation"
     >
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-sm'
-          : 'bg-transparent'
-      }`}
-    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
+          {/* Logo */}
           <motion.div
+            {...motionSettings}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
             className="text-xl font-serif font-bold text-gray-900 dark:text-white"
           >
-            AJ
+            <a 
+              href="#home" 
+              onClick={(e) => {
+                e.preventDefault()
+                scrollToSection('#home')
+              }}
+              className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md px-2 py-1"
+              aria-label="Go to homepage"
+            >
+              AJ
+            </a>
           </motion.div>
 
+          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item, index) => (
               <motion.button
                 key={item.name}
+                {...motionSettings}
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 * index }}
                 onClick={() => scrollToSection(item.href)}
-                className={`nav-link ${
+                onKeyDown={(e) => handleKeyDown(e, item.href)}
+                className={`nav-link focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md px-3 py-2 ${
                   activeSection === item.href.slice(1) ? 'active' : ''
                 }`}
+                aria-label={item.ariaLabel}
+                aria-current={activeSection === item.href.slice(1) ? 'page' : undefined}
               >
                 {item.name}
               </motion.button>
             ))}
           </div>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-          >
-            <ThemeToggle />
-          </motion.div>
+          {/* Desktop Theme Toggle & Mobile Menu Button */}
+          <div className="flex items-center space-x-4">
+            <motion.div
+              {...motionSettings}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
+              <ThemeToggle />
+            </motion.div>
+
+            {/* Mobile menu button */}
+            <button
+              onClick={toggleMobileMenu}
+              className="md:hidden p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md"
+              aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-menu"
+            >
+              {isMobileMenuOpen ? (
+                <X size={24} aria-hidden="true" />
+              ) : (
+                <Menu size={24} aria-hidden="true" />
+              )}
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Mobile menu */}
-      <div className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
-        <div className="px-4 py-2 space-y-1">
-          {navItems.map((item) => (
-            <button
-              key={item.name}
-              onClick={() => scrollToSection(item.href)}
-              className={`block w-full text-left px-3 py-2 text-base font-medium transition-colors ${
-                activeSection === item.href.slice(1)
-                  ? 'text-primary-600 dark:text-primary-400'
-                  : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
-              }`}
-            >
-              {item.name}
-            </button>
-          ))}
-        </div>
-      </div>
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            id="mobile-menu"
+            {...motionSettings}
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2 }}
+            className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 shadow-lg"
+          >
+            <div className="px-4 py-3 space-y-2">
+              {navItems.map((item) => (
+                <button
+                  key={item.name}
+                  onClick={() => scrollToSection(item.href)}
+                  onKeyDown={(e) => handleKeyDown(e, item.href)}
+                  className={`block w-full text-left px-3 py-3 text-base font-medium transition-colors rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                    activeSection === item.href.slice(1)
+                      ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20'
+                      : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
+                  }`}
+                  aria-label={item.ariaLabel}
+                  aria-current={activeSection === item.href.slice(1) ? 'page' : undefined}
+                >
+                  {item.name}
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.nav>
   )
 }
