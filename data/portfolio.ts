@@ -2,27 +2,27 @@ import { PortfolioData } from '../types'
 
 export const portfolioData: PortfolioData = {
   personal: {
-    name: 'Alex Johnson',
+    name: 'Rajin Uddin',
     title: 'Computer Science Student',
     roles: [
       'Full-Stack Developer',
       'DevOps Enthusiast',
       'Open Source Contributor'
     ],
-    email: 'alex.johnson@email.com',
-    location: 'San Francisco, CA',
+    email: 'razinn70@gmail.com',
+    location: 'Guelph, Ontario, Canada',
     bio: 'Passionate computer science student with a love for building scalable web applications and automating workflows. Currently pursuing a BS in Computer Science with a focus on software engineering and cloud technologies.',
     avatar: '/avatar.jpg'
   },
   social: [
     {
       name: 'GitHub',
-      url: 'https://github.com/alexjohnson',
+      url: 'https://github.com/razinn70',
       icon: 'github'
     },
     {
       name: 'LinkedIn',
-      url: 'https://linkedin.com/in/alexjohnson',
+      url: 'https://linkedin.com/in/razinn70',
       icon: 'linkedin'
     },
     {
@@ -32,7 +32,7 @@ export const portfolioData: PortfolioData = {
     },
     {
       name: 'Email',
-      url: 'mailto:alex.johnson@email.com',
+      url: 'mailto:razinn70@gmail.com',
       icon: 'mail'
     }
   ],

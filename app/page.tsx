@@ -1,19 +1,17 @@
-import { Navigation } from '../components/navigation'
+import { NavigationEdh } from '../components/navigation-edh'
 import { Hero } from '../components/hero'
-import { About } from '../components/about'
-import { Projects } from '../components/projects'
-import { Contact } from '../components/contact'
-import { Footer } from '../components/footer'
+import { Projects } from '../components/projects-edh'
+import { ContactEdh } from '../components/contact-edh'
+import { FooterEdh } from '../components/footer-edh'
 
 export default function Home() {
   return (
-    <main className="min-h-screen">
-      <Navigation />
+    <main className="min-h-screen bg-white dark:bg-gray-900">
+      <NavigationEdh />
       <Hero />
-      <About />
       <Projects />
-      <Contact />
-      <Footer />
+      <ContactEdh />
+      <FooterEdh />
     </main>
   )
 }
