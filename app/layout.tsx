@@ -1,24 +1,54 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '../components/theme-provider'
+import { portfolioData } from '../data/portfolio'
 
+// Optimized font loading with fallbacks and display strategies
 const inter = Inter({ 
   subsets: ['latin'],
   variable: '--font-sans',
   display: 'swap',
+  fallback: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+  preload: true,
 })
 
-// We'll use system serif fonts
+// System fonts with proper CSS variables
 const serif = {
   variable: '--font-serif',
 }
 
+const mono = {
+  variable: '--font-mono',
+}
+
+// Content Security Policy for security
+const cspHeader = `
+  default-src 'self';
+  script-src 'self' 'unsafe-eval' 'unsafe-inline' https://vercel.live;
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+  img-src 'self' blob: data: https:;
+  font-src 'self' https://fonts.gstatic.com;
+  object-src 'none';
+  base-uri 'self';
+  form-action 'self';
+  frame-ancestors 'none';
+  upgrade-insecure-requests;
+`
+
+// Centralized metadata using portfolio data
+const { personal } = portfolioData
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://rajinuddin.dev'
+
 export const metadata: Metadata = {
-  title: 'Alex Johnson - Computer Science Student & Full-Stack Developer',
-  description: 'Passionate computer science student with expertise in full-stack development, DevOps, and open source contributions. Currently pursuing BS in Computer Science with focus on software engineering and cloud technologies.',
+  title: {
+    default: `${personal.name} - ${personal.title}`,
+    template: `%s | ${personal.name}`,
+  },
+  description: personal.bio,
   keywords: [
-    'Alex Johnson',
+    personal.name,
+    personal.title,
     'Computer Science Student',
     'Full-Stack Developer',
     'DevOps',
@@ -30,29 +60,41 @@ export const metadata: Metadata = {
     'Python',
     'Portfolio'
   ],
-  authors: [{ name: 'Alex Johnson' }],
-  creator: 'Alex Johnson',
-  publisher: 'Alex Johnson',
+  authors: [{ name: personal.name, url: siteUrl }],
+  creator: personal.name,
+  publisher: personal.name,
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://alexjohnson.dev'),
+  metadataBase: new URL(siteUrl),
   alternates: {
     canonical: '/',
+    languages: {
+      'en-US': '/en-US',
+      'x-default': '/',
+    },
   },
   openGraph: {
-    title: 'Alex Johnson - Computer Science Student & Full-Stack Developer',
-    description: 'Passionate computer science student with expertise in full-stack development, DevOps, and open source contributions.',
-    url: 'https://alexjohnson.dev',
-    siteName: 'Alex Johnson Portfolio',
+    title: `${personal.name} - ${personal.title}`,
+    description: personal.bio,
+    url: siteUrl,
+    siteName: `${personal.name} Portfolio`,
     images: [
       {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Alex Johnson Portfolio',
+        alt: `${personal.name} Portfolio`,
+        type: 'image/jpeg',
+      },
+      {
+        url: '/og-image-square.jpg',
+        width: 1200,
+        height: 1200,
+        alt: `${personal.name} Portfolio`,
+        type: 'image/jpeg',
       },
     ],
     locale: 'en_US',
@@ -60,25 +102,42 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Alex Johnson - Computer Science Student & Full-Stack Developer',
-    description: 'Passionate computer science student with expertise in full-stack development, DevOps, and open source contributions.',
-    creator: '@alexjohnson',
+    title: `${personal.name} - ${personal.title}`,
+    description: personal.bio,
+    creator: '@rajinuddin', // Update with actual Twitter handle
     images: ['/og-image.jpg'],
   },
   robots: {
     index: true,
     follow: true,
+    nocache: false,
     googleBot: {
       index: true,
       follow: true,
+      noimageindex: false,
       'max-video-preview': -1,
       'max-image-preview': 'large',
       'max-snippet': -1,
     },
+  },  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION || 'your-google-site-verification',
+    yandex: process.env.YANDEX_VERIFICATION,
   },
-  verification: {
-    google: 'your-google-site-verification',
-  },
+  category: 'technology',
+  classification: 'personal portfolio',
+  referrer: 'origin-when-cross-origin',
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#111827' },
+  ],
+  colorScheme: 'light dark',
 }
 
 export default function RootLayout({
@@ -86,28 +145,86 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  return (
-    <html lang="en" suppressHydrationWarning>
+  return (    <html 
+      lang="en" 
+      suppressHydrationWarning
+      className={`${inter.variable} ${mono.variable} ${serif.variable}`}
+    >
       <head>
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        {/* Security headers */}
+        <meta httpEquiv="Content-Security-Policy" content={cspHeader.replace(/\s{2,}/g, ' ').trim()} />
+        <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
+        <meta httpEquiv="X-Frame-Options" content="DENY" />
+        <meta httpEquiv="X-XSS-Protection" content="1; mode=block" />
+        <meta httpEquiv="Referrer-Policy" content="origin-when-cross-origin" />
+        
+        {/* Performance hints */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="//fonts.gstatic.com" />
+        
+        {/* Icons and manifest */}
+        <link rel="icon" href="/favicon.ico" sizes="32x32" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/site.webmanifest" />
-        <meta name="theme-color" content="#0ea5e9" />
+        
+        {/* Additional meta tags for better mobile experience */}
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content={personal.name} />
+        
+        {/* Preload critical resources */}
+        <link rel="preload" href="/fonts/inter-var.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
       </head>
       <body 
-        className={`${inter.variable} ${serif.variable} font-sans antialiased`}
+        className="font-sans antialiased bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300"
         suppressHydrationWarning
       >
+        {/* Skip to main content for accessibility */}
+        <a 
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded-md z-50 transition-all"
+        >
+          Skip to main content
+        </a>
+
+        {/* No-script fallback */}
+        <noscript>
+          <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+            <div className="flex">
+              <div className="ml-3">
+                <p className="text-sm text-yellow-700">
+                  This website works best with JavaScript enabled. Please enable JavaScript for the best experience.
+                </p>
+              </div>
+            </div>
+          </div>
+        </noscript>
+
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
-          disableTransitionOnChange
+          disableTransitionOnChange={false}
+          storageKey="portfolio-theme"
         >
           {children}
         </ThemeProvider>
+
+        {/* Reduced motion support */}
+        <style jsx global>{`
+          @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+              animation-duration: 0.01ms !important;
+              animation-iteration-count: 1 !important;
+              transition-duration: 0.01ms !important;
+              scroll-behavior: auto !important;
+            }
+          }
+        `}</style>
       </body>
     </html>
   )
