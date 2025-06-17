@@ -146,4 +146,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Built with ❤️ by [Your Name](https://yourwebsite.com)**
+**Built with ❤️ by [Rajin Uddin](https://yourwebsite.com)**
