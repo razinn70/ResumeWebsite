@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ExternalLink, Github } from 'lucide-react'
+import { Github } from 'lucide-react'
 import { portfolioData } from '../data/portfolio'
 import type { Project } from '../types'
 
@@ -29,7 +29,7 @@ const itemVariants = {
     scale: 1,
     transition: {
       duration: 0.8,
-      ease: "easeOut"
+      ease: "easeOut" as const
     }
   }
 }

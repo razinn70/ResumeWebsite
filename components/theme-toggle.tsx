@@ -16,14 +16,10 @@ const ANIMATION_VARIANTS = {
   },
   icon: {
     initial: { opacity: 0, rotate: -90, scale: 0 },
-    animate: { opacity: 1, rotate: 0, scale: 1 },
-    exit: { opacity: 0, rotate: 90, scale: 0 },
+    animate: { opacity: 1, rotate: 0, scale: 1 },    exit: { opacity: 0, rotate: 90, scale: 0 },
     transition: { duration: 0.2, ease: 'easeInOut' }
   }
 } as const
-
-// Type-safe theme validation
-type ThemeType = 'light' | 'dark' | 'system' | undefined
 
 function isValidTheme(theme: string | undefined): theme is 'light' | 'dark' {
   return theme === 'light' || theme === 'dark'

@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ExternalLink, Github, Folder, FileText } from 'lucide-react'
+import { ExternalLink, Github } from 'lucide-react'
 import { ScrollReveal } from './scroll-transition'
 
 interface Project {
@@ -111,15 +111,14 @@ export function TerminalProjects({ projects = defaultProjects, className = "" }:
                   <div className="flex items-center space-x-2">
                     <span className="text-terminal-green">$</span>
                     <span>ls -la /projects/</span>
-                  </div>
-                  <div className="text-terminal-amber/80">
+                  </div>                  <div className="text-terminal-amber/80">
                     total {projects.length} projects
                   </div>
                   <div className="text-xl font-bold text-terminal-orange">
                     drwxr-xr-x  {projects.length} user staff  recent_projects/
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
 
             {/* Projects Grid */}

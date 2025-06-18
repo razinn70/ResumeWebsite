@@ -2,7 +2,7 @@
 
 import { Suspense, useRef, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Text, Html, PerspectiveCamera, Environment } from '@react-three/drei'
+import { Html, PerspectiveCamera, Environment } from '@react-three/drei'
 import { EffectComposer, Bloom, Noise, Vignette, ChromaticAberration } from '@react-three/postprocessing'
 import { BlendFunction } from 'postprocessing'
 import * as THREE from 'three'

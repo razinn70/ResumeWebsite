@@ -15,19 +15,41 @@ const navItems = [
 type SectionId = 'home' | 'about' | 'projects' | 'contact'
 
 // Debounce hook for performance optimization
-function useDebounce<T extends (...args: any[]) => any>(
+/**
+ * Custom hook that debounces a callback function
+ * @param callback - The function to debounce
+ * @param delay - Delay in milliseconds
+ * @returns Debounced version of the callback
+ */
+function useDebounce<T extends (...args: unknown[]) => unknown>(
   callback: T,
   delay: number
 ): T {
-  const timeoutRef = useRef<NodeJS.Timeout>()
+  // Use null as initial value for timeout reference
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
   
-  return useCallback(
-    ((...args: Parameters<T>) => {
-      clearTimeout(timeoutRef.current)
+  const debouncedCallback = useCallback(
+    (...args: Parameters<T>) => {
+      // Clear existing timeout if it exists
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+      // Set new timeout
       timeoutRef.current = setTimeout(() => callback(...args), delay)
-    }) as T,
+    },
     [callback, delay]
   )
+  
+  // Cleanup function for useEffect compatibility
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+    }
+  }, [])
+  
+  return debouncedCallback as T
 }
 
 export function Navigation() {

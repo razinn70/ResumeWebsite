@@ -74,7 +74,7 @@ export default function Skills() {
 
           {/* Skills Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {skills.map((skillGroup, index) => (
+            {skills.map((skillGroup) => (
               <motion.div
                 key={skillGroup.category}
                 variants={itemVariants}
@@ -84,7 +84,7 @@ export default function Skills() {
                   {skillGroup.category}
                 </h3>
                 <div className="flex flex-wrap gap-2">
-                  {skillGroup.items.map((skill, skillIndex) => (
+                  {skillGroup.items.map((skill) => (
                     <motion.span
                       key={skill}
                       variants={skillVariants}

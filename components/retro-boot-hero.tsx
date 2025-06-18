@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CRTMonitor3D } from './crt-monitor-3d'
 
@@ -21,9 +21,8 @@ export function RetroBootHero({
   const [isInteractive, setIsInteractive] = useState(false)
   const [showAvatar, setShowAvatar] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
-
   // Authentic BIOS/Boot sequence
-  const bootSequence = [
+  const bootSequence = useMemo(() => [
     "RETRO-OS Boot Loader v2.1",
     "Copyright (C) 2025 Digital Craftsman Industries",
     "",
@@ -46,7 +45,7 @@ export function RetroBootHero({
     "",
     "System initialized. Type 'help' for available commands.",
     "user@retro:~$ "
-  ]
+  ], [name, roles, systemName])
 
   // Enhanced command system
   const commands = {
@@ -144,7 +143,7 @@ export function RetroBootHero({
     } else {
       setIsInteractive(true)
     }
-  }, [currentStep, bootSequence.length, name])
+  }, [currentStep, bootSequence.length, name, bootSequence])
 
   const handleCommand = (input: string) => {
     const command = input.toLowerCase().trim()

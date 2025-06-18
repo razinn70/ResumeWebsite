@@ -1,7 +1,6 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Github, Linkedin, Mail, ExternalLink } from 'lucide-react'
 
 interface TerminalFooterProps {
   className?: string
@@ -9,41 +8,6 @@ interface TerminalFooterProps {
 
 export function Footer({ className = "" }: TerminalFooterProps) {
   const currentYear = new Date().getFullYear()
-  
-  const socialLinks = [
-    {
-      name: 'GitHub',
-      url: 'https://github.com/rajinuddin',
-      icon: Github,
-      command: 'git clone github.com/rajinuddin'
-    },
-    {
-      name: 'LinkedIn',
-      url: 'https://linkedin.com/in/rajinuddin',
-      icon: Linkedin,
-      command: 'curl linkedin.com/in/rajinuddin'
-    },
-    {
-      name: 'Email',
-      url: 'mailto:rajin@example.com',
-      icon: Mail,
-      command: 'mail rajin@example.com'
-    }
-  ]
-
-  const quickLinks = [
-    { name: 'about', href: '#about', command: 'cd /about' },
-    { name: 'projects', href: '#projects', command: 'ls /projects' },
-    { name: 'skills', href: '#skills', command: 'cat /skills.txt' },
-    { name: 'contact', href: '#contact', command: 'ping contact@' },
-  ]
-
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
-    }
-  }
 
   return (
     <footer className={`bg-terminal-black border-t border-terminal-amber/30 ${className}`}>
