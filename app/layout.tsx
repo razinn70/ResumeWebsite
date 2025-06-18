@@ -178,15 +178,14 @@ export default function RootLayout({
         
         {/* Preload critical resources */}
         <link rel="preload" href="/fonts/inter-var.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
-      </head>
-      <body 
-        className="font-sans antialiased bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300"
+      </head>      <body 
+        className="bg-black text-terminal-amber font-terminal antialiased min-h-screen"
         suppressHydrationWarning
       >
         {/* Skip to main content for accessibility */}
         <a 
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded-md z-50 transition-all"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-terminal-amber text-terminal-black px-4 py-2 rounded-md z-50 font-terminal"
         >
           Skip to main content
         </a>
@@ -204,12 +203,26 @@ export default function RootLayout({
           </div>
         </noscript>        <ClientProviders
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="dark"
+          enableSystem={false}
           disableTransitionOnChange={false}
           storageKey="portfolio-theme"
         >
           {children}
+          {/* Retro Theme Toggle */}
+          <div suppressHydrationWarning>
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+                  // Prevent flash of unstyled content
+                  (function() {
+                    const theme = localStorage.getItem('portfolio-retro-theme') || 'retro';
+                    document.documentElement.classList.add(theme + '-mode');
+                  })();
+                `
+              }}
+            />
+          </div>
         </ClientProviders>
       </body>
     </html>

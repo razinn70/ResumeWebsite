@@ -1,14 +1,16 @@
 import { Suspense, lazy } from 'react'
 import { Metadata } from 'next'
-import { Hero } from '@/components/hero'
-import { Navigation } from '@/components/navigation'
 import { ErrorBoundary } from '@/components/error-boundary'
+import { RetroBootHero } from '@/components/retro-boot-hero'
+import { TerminalNavigation } from '@/components/terminal-navigation'
+import { ScrollTransition, ScrollReveal } from '@/components/scroll-transition'
+import { RetroThemeToggle } from '@/components/retro-theme-toggle'
 
 // Lazy load non-critical components for better performance
-const Projects = lazy(() => import('@/components/projects'))
-const About = lazy(() => import('@/components/about').then(m => ({ default: m.About })))
+const RetroProjects = lazy(() => import('@/components/retro-projects'))
+const TerminalAbout = lazy(() => import('@/components/terminal-about'))
+const TerminalFooter = lazy(() => import('@/components/terminal-footer'))
 const Contact = lazy(() => import('@/components/contact').then(m => ({ default: m.Contact })))
-const Footer = lazy(() => import('@/components/footer').then(m => ({ default: m.Footer })))
 const Skills = lazy(() => import('../components/skills'))
 
 // Structured data for SEO
@@ -55,43 +57,57 @@ export default function Home() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
-
-      <Navigation />
+      />      <TerminalNavigation />
+      
+      {/* Retro Theme Toggle */}
+      <RetroThemeToggle />
       
       <main id="main-content">
-        {/* Hero loads immediately - critical above-the-fold content */}
-        <ErrorBoundary fallback={<div>Error loading hero section</div>}>
-          <Hero />
-        </ErrorBoundary>        {/* Lazy load below-the-fold sections */}
-        <ErrorBoundary fallback={<div>Error loading about section</div>}>
-          <Suspense fallback={<SectionSkeleton />}>
-            <About />
-          </Suspense>
-        </ErrorBoundary>
+        {/* Terminal Hero Section - loads immediately */}
+        <ScrollTransition>
+          <ErrorBoundary fallback={<div>Error loading terminal</div>}>
+            <RetroBootHero 
+              name="Rajin Uddin"
+              roles={["Software Engineer", "Digital Designer", "Full-Stack Developer"]}
+              systemName="rajin-linux"
+            />
+          </ErrorBoundary>
+        </ScrollTransition>
 
-        <ErrorBoundary fallback={<div>Error loading skills section</div>}>
-          <Suspense fallback={<SectionSkeleton />}>
-            <Skills />
-          </Suspense>
-        </ErrorBoundary>
+        {/* Lazy load below-the-fold sections */}        <ScrollReveal>
+          <ErrorBoundary fallback={<div>Error loading about section</div>}>
+            <Suspense fallback={<SectionSkeleton />}>
+              <TerminalAbout />
+            </Suspense>
+          </ErrorBoundary>
+        </ScrollReveal>
 
-        <ErrorBoundary fallback={<div>Error loading projects section</div>}>
-          <Suspense fallback={<SectionSkeleton />}>
-            <Projects />
-          </Suspense>
-        </ErrorBoundary>
+        <ScrollReveal delay={0.1}>
+          <ErrorBoundary fallback={<div>Error loading skills section</div>}>
+            <Suspense fallback={<SectionSkeleton />}>
+              <Skills />
+            </Suspense>
+          </ErrorBoundary>
+        </ScrollReveal>
 
-        <ErrorBoundary fallback={<div>Error loading contact section</div>}>
-          <Suspense fallback={<SectionSkeleton />}>
-            <Contact />
-          </Suspense>
-        </ErrorBoundary>
-      </main>
+        <ScrollReveal delay={0.2}>
+          <ErrorBoundary fallback={<div>Error loading projects section</div>}>
+            <Suspense fallback={<SectionSkeleton />}>
+              <RetroProjects />
+            </Suspense>
+          </ErrorBoundary>
+        </ScrollReveal>
 
-      <ErrorBoundary fallback={<div>Error loading footer</div>}>
+        <ScrollReveal delay={0.3}>
+          <ErrorBoundary fallback={<div>Error loading contact section</div>}>
+            <Suspense fallback={<SectionSkeleton />}>
+              <Contact />
+            </Suspense>
+          </ErrorBoundary>
+        </ScrollReveal>
+      </main>      <ErrorBoundary fallback={<div>Error loading footer</div>}>
         <Suspense fallback={<SectionSkeleton />}>
-          <Footer />
+          <TerminalFooter />
         </Suspense>
       </ErrorBoundary>
     </>
