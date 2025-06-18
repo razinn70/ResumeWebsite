@@ -1,6 +1,6 @@
 import { Suspense, lazy } from 'react'
 import { ErrorBoundary } from '@/components/error-boundary'
-import { RetroBootHero } from '@/components/retro-boot-hero'
+import RetroBootHero from '@/components/retro-boot-hero'
 import { TerminalNavigation } from '@/components/terminal-navigation'
 import { ScrollTransition, ScrollReveal } from '@/components/scroll-transition'
 import { RetroThemeToggle } from '@/components/retro-theme-toggle'

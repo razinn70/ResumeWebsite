@@ -1,16 +1,64 @@
+/**
+ * @fileoverview RetroBootHero - Interactive terminal-style hero component with 3D CRT monitor
+ * 
+ * Features:
+ * - Authentic BIOS boot sequence animation
+ * - Interactive terminal shell with commands
+ * - 3D CRT monitor with custom shaders
+ * - ASCII art avatar display
+ * - Responsive design with mobile optimization
+ * - Full accessibility support
+ * 
+ * @author Senior Frontend Engineer
+ * @version 2.0.0
+ * @since 2025-06-18
+ */
+
 'use client'
 
-import { useState, useEffect, useRef, useMemo } from 'react'
+import { useState, useEffect, useRef, useMemo, memo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CRTMonitor3D } from './crt-monitor-3d'
+import { ErrorBoundary } from './error-boundary'
 
+/**
+ * Props interface for RetroBootHero component
+ * @interface RetroBootHeroProps
+ */
 interface RetroBootHeroProps {
+  /** Developer name displayed in terminal and avatar */
   name?: string
+  /** Array of professional roles/titles */
   roles?: string[]
+  /** System name shown in terminal prompt */
   systemName?: string
 }
 
-export function RetroBootHero({ 
+/**
+ * RetroBootHero Component
+ * 
+ * An interactive terminal-style hero section featuring:
+ * - Animated boot sequence with authentic BIOS messages
+ * - 3D CRT monitor with custom WebGL shaders
+ * - Interactive shell with custom commands
+ * - ASCII art avatar and system information
+ * - Mobile-responsive design with touch support
+ * 
+ * @component
+ * @param {RetroBootHeroProps} props - Component props
+ * @returns {JSX.Element} Rendered RetroBootHero component
+ * 
+ * @example
+ * ```tsx
+ * <RetroBootHero 
+ *   name="John Doe"
+ *   roles={["Full-Stack Developer", "UI Designer"]}
+ *   systemName="dev-machine"
+ * />
+ * ```
+ */
+
+const RetroBootHero = memo(function RetroBootHero({ 
   name = "Rajin Uddin", 
   roles = ["Software Engineer", "Digital Designer", "Full-Stack Developer"],
   systemName = "rajin-linux"
@@ -201,9 +249,23 @@ export function RetroBootHero({
           className="order-2 lg:order-1"
           initial={{ opacity: 0, x: -100 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
-        >
-          <CRTMonitor3D>
+          transition={{ duration: 1.2, ease: "easeOut" }}        >
+          {/* 3D CRT Monitor with Error Boundary for WebGL fallback */}
+          <ErrorBoundary 
+            fallback={
+              <div className="w-full h-[600px] bg-gradient-to-br from-gray-900 to-black border-2 border-terminal-amber/30 rounded-lg flex items-center justify-center">
+                <div className="text-center p-8">
+                  <div className="text-terminal-amber font-retro mb-4">
+                    ⚠️ 3D RENDERING UNAVAILABLE
+                  </div>
+                  <div className="text-terminal-amber/60 text-sm">
+                    WebGL not supported. Displaying fallback interface.
+                  </div>
+                </div>
+              </div>
+            }
+          >
+            <CRTMonitor3D>
             <div className="terminal-screen w-full h-full p-6 cursor-pointer" onClick={focusInput}>
               <div className="space-y-1 text-sm">
                 {/* Boot Sequence */}
@@ -293,14 +355,14 @@ export function RetroBootHero({
                       onKeyPress={handleKeyPress}
                       className="terminal-input flex-1 ml-1 font-retro text-sm"
                       placeholder="Type 'help' for commands..."
-                      autoFocus
-                    />
+                      autoFocus                    />
                     <span className="cursor ml-1"></span>
                   </motion.div>
                 )}
               </div>
             </div>
           </CRTMonitor3D>
+          </ErrorBoundary>
         </motion.div>
 
         {/* ASCII Avatar & Info Panel */}
@@ -371,11 +433,13 @@ export function RetroBootHero({
             transition={{ duration: 2, repeat: Infinity }}
           >
             ↓ SCROLL FOR FULL EXPERIENCE ↓
-          </motion.div>
-        </motion.div>
+          </motion.div>        </motion.div>
       </div>
     </section>
   )
-}
+})
+
+// Display name for debugging
+RetroBootHero.displayName = 'RetroBootHero'
 
 export default RetroBootHero
