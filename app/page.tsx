@@ -1,5 +1,4 @@
 import { Suspense, lazy } from 'react'
-import { Metadata } from 'next'
 import { ErrorBoundary } from '@/components/error-boundary'
 import { RetroBootHero } from '@/components/retro-boot-hero'
 import { TerminalNavigation } from '@/components/terminal-navigation'
@@ -11,7 +10,7 @@ const RetroProjects = lazy(() => import('@/components/retro-projects'))
 const TerminalAbout = lazy(() => import('@/components/terminal-about'))
 const TerminalFooter = lazy(() => import('@/components/terminal-footer'))
 const Contact = lazy(() => import('@/components/contact').then(m => ({ default: m.Contact })))
-const Skills = lazy(() => import('../components/skills'))
+const Skills = lazy(() => import('@/components/skills-fixed'))
 
 // Structured data for SEO
 const structuredData = {
