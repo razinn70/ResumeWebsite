@@ -1,14 +1,15 @@
 import { Suspense, lazy } from 'react'
 import { Metadata } from 'next'
 import { Hero } from '@/components/hero'
-import NavigationEdh from '@/components/navigation-edh'
-import { ErrorBoundary } from '../components/error-boundary'
+import { Navigation } from '@/components/navigation'
+import { ErrorBoundary } from '@/components/error-boundary'
 
 // Lazy load non-critical components for better performance
-const Projects = lazy(() => import('@/components/projects-edh').then(m => ({ default: m.Projects })))
-const AboutEdh = lazy(() => import('@/components/about-edh').then(m => ({ default: m.AboutEdh })))
-const ContactEdh = lazy(() => import('@/components/contact-edh').then(m => ({ default: m.ContactEdh })))
-const FooterEdh = lazy(() => import('@/components/footer-edh').then(m => ({ default: m.FooterEdh })))
+const Projects = lazy(() => import('@/components/projects'))
+const About = lazy(() => import('@/components/about').then(m => ({ default: m.About })))
+const Contact = lazy(() => import('@/components/contact').then(m => ({ default: m.Contact })))
+const Footer = lazy(() => import('@/components/footer').then(m => ({ default: m.Footer })))
+const Skills = lazy(() => import('../components/skills'))
 
 // Structured data for SEO
 const structuredData = {
@@ -50,26 +51,28 @@ export default function Home() {
         className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded-md z-50"
       >
         Skip to main content
-      </a>
-
-      {/* Structured data for SEO */}
+      </a>      {/* Structured data for SEO */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
 
-      <NavigationEdh />
+      <Navigation />
       
       <main id="main-content">
         {/* Hero loads immediately - critical above-the-fold content */}
         <ErrorBoundary fallback={<div>Error loading hero section</div>}>
           <Hero />
-        </ErrorBoundary>
-
-        {/* Lazy load below-the-fold sections */}
+        </ErrorBoundary>        {/* Lazy load below-the-fold sections */}
         <ErrorBoundary fallback={<div>Error loading about section</div>}>
           <Suspense fallback={<SectionSkeleton />}>
-            <AboutEdh />
+            <About />
+          </Suspense>
+        </ErrorBoundary>
+
+        <ErrorBoundary fallback={<div>Error loading skills section</div>}>
+          <Suspense fallback={<SectionSkeleton />}>
+            <Skills />
           </Suspense>
         </ErrorBoundary>
 
@@ -81,14 +84,14 @@ export default function Home() {
 
         <ErrorBoundary fallback={<div>Error loading contact section</div>}>
           <Suspense fallback={<SectionSkeleton />}>
-            <ContactEdh />
+            <Contact />
           </Suspense>
         </ErrorBoundary>
       </main>
 
       <ErrorBoundary fallback={<div>Error loading footer</div>}>
         <Suspense fallback={<SectionSkeleton />}>
-          <FooterEdh />
+          <Footer />
         </Suspense>
       </ErrorBoundary>
     </>

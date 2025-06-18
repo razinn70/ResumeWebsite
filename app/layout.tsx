@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { ThemeProvider } from '../components/theme-provider'
+import { ClientProviders } from '../components/client-providers'
 import { portfolioData } from '../data/portfolio'
 
 // Optimized font loading with fallbacks and display strategies
@@ -202,9 +202,7 @@ export default function RootLayout({
               </div>
             </div>
           </div>
-        </noscript>
-
-        <ThemeProvider
+        </noscript>        <ClientProviders
           attribute="class"
           defaultTheme="system"
           enableSystem
@@ -212,19 +210,7 @@ export default function RootLayout({
           storageKey="portfolio-theme"
         >
           {children}
-        </ThemeProvider>
-
-        {/* Reduced motion support */}
-        <style jsx global>{`
-          @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-              animation-duration: 0.01ms !important;
-              animation-iteration-count: 1 !important;
-              transition-duration: 0.01ms !important;
-              scroll-behavior: auto !important;
-            }
-          }
-        `}</style>
+        </ClientProviders>
       </body>
     </html>
   )
