@@ -1,0 +1,253 @@
+{
+  "skillTree": {
+    "categories": [
+      {
+        "id": "programming",
+        "name": "Programming",
+        "icon": "💻",
+        "color": "#FFB000",
+        "position": { "x": 0, "y": 0 },
+        "skills": [
+          {
+            "id": "javascript",
+            "name": "JavaScript",
+            "level": 5,
+            "xp": 850,
+            "maxXp": 1000,
+            "status": "mastered",
+            "learnedVia": "Self-taught + Projects",
+            "position": { "x": 100, "y": -50 },
+            "description": "Dynamic programming language for web development",
+            "linkedTo": []
+          },
+          {
+            "id": "typescript",
+            "name": "TypeScript",
+            "level": 4,
+            "xp": 720,
+            "maxXp": 1000,
+            "status": "mastered",
+            "learnedVia": "Professional Experience",
+            "position": { "x": 100, "y": 50 },
+            "description": "Statically typed superset of JavaScript",
+            "linkedTo": ["javascript"]
+          },
+          {
+            "id": "python",
+            "name": "Python",
+            "level": 4,
+            "xp": 680,
+            "maxXp": 1000,
+            "status": "mastered",
+            "learnedVia": "University + Projects",
+            "position": { "x": 100, "y": 150 },
+            "description": "Versatile language for web dev, AI, and automation",
+            "linkedTo": []
+          }
+        ]
+      },
+      {
+        "id": "frontend",
+        "name": "Frontend",
+        "icon": "🎨",
+        "color": "#00FF41",
+        "position": { "x": 300, "y": -100 },
+        "skills": [
+          {
+            "id": "react",
+            "name": "React",
+            "level": 5,
+            "xp": 900,
+            "maxXp": 1000,
+            "status": "mastered",
+            "learnedVia": "Bootcamp + Professional",
+            "position": { "x": 400, "y": -150 },
+            "description": "Component-based UI library for building interfaces",
+            "linkedTo": ["javascript", "typescript"]
+          },
+          {
+            "id": "nextjs",
+            "name": "Next.js",
+            "level": 4,
+            "xp": 750,
+            "maxXp": 1000,
+            "status": "mastered",
+            "learnedVia": "Personal Projects",
+            "position": { "x": 600, "y": -150 },
+            "description": "React framework with SSR and routing",
+            "linkedTo": ["react"]
+          },
+          {
+            "id": "tailwind",
+            "name": "Tailwind CSS",
+            "level": 5,
+            "xp": 880,
+            "maxXp": 1000,
+            "status": "mastered",
+            "learnedVia": "Professional + Projects",
+            "position": { "x": 400, "y": -50 },
+            "description": "Utility-first CSS framework",
+            "linkedTo": ["react"]
+          },
+          {
+            "id": "threejs",
+            "name": "Three.js",
+            "level": 3,
+            "xp": 450,
+            "maxXp": 1000,
+            "status": "learning",
+            "learnedVia": "Personal Projects",
+            "position": { "x": 600, "y": -50 },
+            "description": "3D graphics library for the web",
+            "linkedTo": ["javascript"]
+          }
+        ]
+      },
+      {
+        "id": "backend",
+        "name": "Backend",
+        "icon": "⚙️",
+        "color": "#FF8C00",
+        "position": { "x": 300, "y": 100 },
+        "skills": [
+          {
+            "id": "nodejs",
+            "name": "Node.js",
+            "level": 4,
+            "xp": 700,
+            "maxXp": 1000,
+            "status": "mastered",
+            "learnedVia": "Professional Experience",
+            "position": { "x": 400, "y": 50 },
+            "description": "JavaScript runtime for server-side development",
+            "linkedTo": ["javascript"]
+          },
+          {
+            "id": "express",
+            "name": "Express.js",
+            "level": 4,
+            "xp": 680,
+            "maxXp": 1000,
+            "status": "mastered",
+            "learnedVia": "Professional Experience",
+            "position": { "x": 600, "y": 50 },
+            "description": "Fast, minimalist web framework for Node.js",
+            "linkedTo": ["nodejs"]
+          },
+          {
+            "id": "fastapi",
+            "name": "FastAPI",
+            "level": 3,
+            "xp": 400,
+            "maxXp": 1000,
+            "status": "learning",
+            "learnedVia": "Personal Projects",
+            "position": { "x": 400, "y": 150 },
+            "description": "Modern Python web framework for APIs",
+            "linkedTo": ["python"]
+          }
+        ]
+      },
+      {
+        "id": "database",
+        "name": "Database",
+        "icon": "🗄️",
+        "color": "#32CD32",
+        "position": { "x": 600, "y": 200 },
+        "skills": [
+          {
+            "id": "mongodb",
+            "name": "MongoDB",
+            "level": 4,
+            "xp": 650,
+            "maxXp": 1000,
+            "status": "mastered",
+            "learnedVia": "Professional + Projects",
+            "position": { "x": 700, "y": 150 },
+            "description": "NoSQL document database",
+            "linkedTo": ["nodejs"]
+          },
+          {
+            "id": "postgresql",
+            "name": "PostgreSQL",
+            "level": 3,
+            "xp": 420,
+            "maxXp": 1000,
+            "status": "learning",
+            "learnedVia": "University + Projects",
+            "position": { "x": 700, "y": 250 },
+            "description": "Advanced open-source relational database",
+            "linkedTo": ["python", "nodejs"]
+          }
+        ]
+      },
+      {
+        "id": "devops",
+        "name": "DevOps",
+        "icon": "🚀",
+        "color": "#FF6B6B",
+        "position": { "x": 800, "y": 0 },
+        "skills": [
+          {
+            "id": "docker",
+            "name": "Docker",
+            "level": 3,
+            "xp": 380,
+            "maxXp": 1000,
+            "status": "learning",
+            "learnedVia": "Professional Experience",
+            "position": { "x": 900, "y": -50 },
+            "description": "Containerization platform",
+            "linkedTo": ["nodejs", "python"]
+          },
+          {
+            "id": "git",
+            "name": "Git",
+            "level": 4,
+            "xp": 720,
+            "maxXp": 1000,
+            "status": "mastered",
+            "learnedVia": "Professional + University",
+            "position": { "x": 900, "y": 50 },
+            "description": "Version control system",
+            "linkedTo": []
+          },
+          {
+            "id": "vercel",
+            "name": "Vercel",
+            "level": 4,
+            "xp": 650,
+            "maxXp": 1000,
+            "status": "mastered",
+            "learnedVia": "Personal Projects",
+            "position": { "x": 1100, "y": 0 },
+            "description": "Frontend deployment platform",
+            "linkedTo": ["nextjs"]
+          }
+        ]
+      }
+    ],
+    "terminalOutput": [
+      "> tree /skills",
+      "📂 Programming",
+      "├── JavaScript █████████░ 85%",
+      "│   ├── React █████████░ 90%",
+      "│   │   └── Next.js ███████░░░ 75%",
+      "│   └── Node.js ███████░░░ 70%",
+      "├── TypeScript ████████░░ 72%",
+      "└── Python ███████░░░ 68%",
+      "    └── FastAPI ████░░░░░░ 40%",
+      "",
+      "📂 Database",
+      "├── MongoDB ███████░░░ 65%",
+      "└── PostgreSQL ████░░░░░░ 42%",
+      "",
+      "📂 DevOps",
+      "├── Docker ████░░░░░░ 38%",
+      "├── Git ████████░░ 72%",
+      "└── Vercel ███████░░░ 65%",
+      "",
+      "Total Skills: 15 | Mastered: 9 | Learning: 6"
+    ]
+  }
+}

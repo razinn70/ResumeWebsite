@@ -145,7 +145,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  return (    <html 
+  return (
+    <html 
       lang="en" 
       suppressHydrationWarning
       className={`${inter.variable} ${mono.variable} ${serif.variable}`}

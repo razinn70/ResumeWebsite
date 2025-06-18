@@ -10,7 +10,7 @@ const RetroProjects = lazy(() => import('@/components/retro-projects'))
 const TerminalAbout = lazy(() => import('@/components/terminal-about'))
 const TerminalFooter = lazy(() => import('@/components/terminal-footer'))
 const Contact = lazy(() => import('@/components/contact').then(m => ({ default: m.Contact })))
-const Skills = lazy(() => import('@/components/skills-fixed'))
+const SkillTree = lazy(() => import('@/components/skill-tree-simple').then(m => ({ default: m.SkillTree })))
 
 // Structured data for SEO
 const structuredData = {
@@ -79,12 +79,10 @@ export default function Home() {
               <TerminalAbout />
             </Suspense>
           </ErrorBoundary>
-        </ScrollReveal>
-
-        <ScrollReveal delay={0.1}>
+        </ScrollReveal>        <ScrollReveal delay={0.1}>
           <ErrorBoundary fallback={<div>Error loading skills section</div>}>
             <Suspense fallback={<SectionSkeleton />}>
-              <Skills />
+              <SkillTree />
             </Suspense>
           </ErrorBoundary>
         </ScrollReveal>

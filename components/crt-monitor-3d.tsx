@@ -167,9 +167,9 @@ export function CRTMonitor3D({ children, className = "" }: CRTMonitorProps) {
           color="#4FC3F7"
           castShadow
         />
-        
-        {/* Environment */}
-        <Environment preset="night" />
+          {/* Environment */}
+        {/* <Environment preset="night" /> */}
+        <color args={['#0a0a0a']} attach="background" />
         
         <Suspense fallback={null}>
           <CRTMonitor>
