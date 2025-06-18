@@ -22,8 +22,7 @@ const itemVariants = {
     opacity: 1, 
     y: 0,
     transition: {
-      duration: 0.4,
-      ease: "easeOut"
+      duration: 0.4
     }
   }
 }
@@ -34,8 +33,7 @@ const skillVariants = {
     opacity: 1, 
     scale: 1,
     transition: {
-      duration: 0.3,
-      ease: "backOut"
+      duration: 0.3
     }
   }
 }

@@ -23,7 +23,7 @@ const itemVariants = {
     y: 0,
     transition: {
       duration: 0.4,
-      ease: "easeOut"
+      ease: "easeOut" as const
     }
   }
 }
@@ -35,7 +35,7 @@ const skillVariants = {
     scale: 1,
     transition: {
       duration: 0.3,
-      ease: "backOut"
+      ease: "easeOut" as const
     }
   }
 }
