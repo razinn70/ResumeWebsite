@@ -1,0 +1,547 @@
+/**
+ * Ultra-Authentic Terminal Styles
+ * Pixel-perfect terminal emulation with VT100/VT220 authenticity
+ */
+
+.ultra-terminal {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  font-family: 'IBM 3270', 'VT323', 'Courier New', monospace;
+  background: #0A0A0A;
+  color: #FFB000;
+  overflow: hidden;
+  
+  /* CRT Monitor Effect */
+  border-radius: 12px;
+  box-shadow: 
+    inset 0 0 100px rgba(255, 176, 0, 0.1),
+    inset 0 0 200px rgba(255, 176, 0, 0.05),
+    0 0 50px rgba(0, 0, 0, 0.8);
+  
+  /* Scanlines */
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(255, 176, 0, 0.03) 2px,
+      rgba(255, 176, 0, 0.03) 4px
+    );
+  
+  /* Screen curvature */
+  transform: perspective(1000px) rotateX(1deg);
+}
+
+.ultra-terminal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 10;
+  
+  /* Phosphor glow */
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 176, 0, 0.05) 0%,
+    transparent 70%
+  );
+  
+  /* CRT flicker */
+  animation: crt-flicker 0.15s linear infinite;
+}
+
+.ultra-terminal::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 5;
+  
+  /* Vignette effect */
+  background: radial-gradient(
+    ellipse at center,
+    transparent 40%,
+    rgba(0, 0, 0, 0.1) 100%
+  );
+}
+
+.terminal-output {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  overflow-y: auto;
+  padding: 20px;
+  line-height: 1.4;
+  
+  /* Custom scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 176, 0, 0.5) transparent;
+}
+
+.terminal-output::-webkit-scrollbar {
+  width: 8px;
+}
+
+.terminal-output::-webkit-scrollbar-track {
+  background: rgba(255, 176, 0, 0.1);
+  border-radius: 4px;
+}
+
+.terminal-output::-webkit-scrollbar-thumb {
+  background: rgba(255, 176, 0, 0.5);
+  border-radius: 4px;
+}
+
+.terminal-output::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 176, 0, 0.7);
+}
+
+.terminal-line {
+  margin-bottom: 4px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: inherit;
+  letter-spacing: 0.05em;
+  
+  /* Text glow effect */
+  text-shadow: 0 0 8px currentColor;
+}
+
+.terminal-line.output {
+  color: #FFB000;
+}
+
+.terminal-line.error {
+  color: #FF6B6B;
+  text-shadow: 0 0 8px #FF6B6B;
+}
+
+.terminal-line.system {
+  color: #00FF41;
+  text-shadow: 0 0 8px #00FF41;
+}
+
+.terminal-line.input {
+  color: #FFB000;
+}
+
+.terminal-input-line {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  position: relative;
+}
+
+.terminal-prompt {
+  color: #00FF41;
+  text-shadow: 0 0 8px #00FF41;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.terminal-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  position: relative;
+}
+
+.terminal-input-text {
+  color: #FFB000;
+  text-shadow: 0 0 8px #FFB000;
+  white-space: pre;
+}
+
+.terminal-cursor {
+  display: inline-block;
+  background-color: #FFB000;
+  margin: 0 1px;
+  position: relative;
+  
+  /* Cursor glow */
+  box-shadow: 
+    0 0 8px currentColor,
+    0 0 16px currentColor;
+}
+
+.terminal-cursor.blink {
+  animation: cursor-blink 1s step-end infinite;
+}
+
+.terminal-cursor.block {
+  width: 0.6em;
+  height: 1.2em;
+}
+
+.terminal-cursor.underline {
+  width: 0.6em;
+  height: 2px;
+  margin-top: auto;
+}
+
+.terminal-cursor.bar {
+  width: 2px;
+  height: 1.2em;
+}
+
+.terminal-hidden-input {
+  position: absolute !important;
+  left: -9999px !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* VT100 Style Classes */
+.terminal-inverse {
+  background-color: currentColor;
+  color: #0A0A0A;
+}
+
+/* Selection styling */
+.ultra-terminal *::selection {
+  background-color: rgba(255, 176, 0, 0.3);
+  color: inherit;
+}
+
+.ultra-terminal *::-moz-selection {
+  background-color: rgba(255, 176, 0, 0.3);
+  color: inherit;
+}
+
+/* Accessibility enhancements */
+.ultra-terminal[data-high-contrast="true"] {
+  background: #000000;
+  color: #FFFFFF;
+}
+
+.ultra-terminal[data-high-contrast="true"] .terminal-line.error {
+  color: #FF0000;
+}
+
+.ultra-terminal[data-high-contrast="true"] .terminal-line.system {
+  color: #00FF00;
+}
+
+.ultra-terminal[data-reduce-motion="true"] {
+  animation: none;
+}
+
+.ultra-terminal[data-reduce-motion="true"] .terminal-cursor {
+  animation: none;
+}
+
+.ultra-terminal[data-reduce-motion="true"]::before {
+  animation: none;
+}
+
+.ultra-terminal[data-large-text="true"] {
+  font-size: 18px;
+}
+
+/* Focus indicators */
+.ultra-terminal:focus-within {
+  outline: 2px solid rgba(255, 176, 0, 0.5);
+  outline-offset: 2px;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .ultra-terminal {
+    font-size: 12px;
+    padding: 12px;
+    transform: none; /* Disable 3D effect on mobile */
+  }
+  
+  .terminal-output {
+    padding: 12px;
+  }
+  
+  .terminal-cursor {
+    width: 0.8em; /* Larger cursor for touch screens */
+  }
+}
+
+/* Print styles */
+@media print {
+  .ultra-terminal {
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+  
+  .ultra-terminal::before,
+  .ultra-terminal::after {
+    display: none !important;
+  }
+  
+  .terminal-line {
+    text-shadow: none !important;
+  }
+  
+  .terminal-cursor {
+    display: none !important;
+  }
+}
+
+/* Animations */
+@keyframes cursor-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+@keyframes crt-flicker {
+  0%, 98% { opacity: 1; }
+  99% { opacity: 0.98; }
+  100% { opacity: 1; }
+}
+
+/* Color theme variations */
+.ultra-terminal[data-theme="green"] {
+  color: #00FF41;
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 255, 65, 0.03) 2px,
+      rgba(0, 255, 65, 0.03) 4px
+    );
+}
+
+.ultra-terminal[data-theme="green"]::before {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 255, 65, 0.05) 0%,
+    transparent 70%
+  );
+}
+
+.ultra-terminal[data-theme="blue"] {
+  color: #4FC3F7;
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(79, 195, 247, 0.03) 2px,
+      rgba(79, 195, 247, 0.03) 4px
+    );
+}
+
+.ultra-terminal[data-theme="blue"]::before {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(79, 195, 247, 0.05) 0%,
+    transparent 70%
+  );
+}
+
+/* Status line (for future implementation) */
+.terminal-status-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 24px;
+  background: rgba(255, 176, 0, 0.1);
+  border-top: 1px solid rgba(255, 176, 0, 0.3);
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  z-index: 20;
+}
+
+.terminal-status-item {
+  color: rgba(255, 176, 0, 0.8);
+  white-space: nowrap;
+}
+
+/* Tab completion styling */
+.terminal-completion-popup {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  background: rgba(10, 10, 10, 0.95);
+  border: 1px solid rgba(255, 176, 0, 0.3);
+  border-radius: 4px;
+  padding: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 30;
+  backdrop-filter: blur(8px);
+}
+
+.terminal-completion-item {
+  padding: 4px 8px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background-color 0.15s ease;
+}
+
+.terminal-completion-item:hover,
+.terminal-completion-item.selected {
+  background-color: rgba(255, 176, 0, 0.2);
+}
+
+/* Multi-line input indicator */
+.terminal-multiline-indicator {
+  color: rgba(255, 176, 0, 0.6);
+  margin-right: 8px;
+}
+
+/* Process indicator */
+.terminal-process-indicator {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #00FF41;
+  animation: pulse 2s infinite;
+  z-index: 25;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Demo Component Styles */
+.terminal-demo {
+  padding: 2rem;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+}
+
+.demo-header {
+  margin-bottom: 2rem;
+}
+
+.terminal-container {
+  perspective: 1000px;
+}
+
+.crt-monitor-frame {
+  background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.8),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+
+.monitor-chrome {
+  background: linear-gradient(145deg, #1e1e1e, #0e0e0e);
+  border-radius: 12px;
+  padding: 12px;
+  border: 2px solid #333;
+}
+
+.monitor-bezel {
+  background: linear-gradient(145deg, #333, #222);
+  border-radius: 8px;
+  padding: 8px;
+  margin-bottom: 4px;
+}
+
+.terminal-title-bar {
+  background: rgba(255, 176, 0, 0.1);
+  border: 1px solid rgba(255, 176, 0, 0.3);
+  border-radius: 4px;
+  padding: 4px 8px;
+  margin-top: 8px;
+}
+
+.terminal-screen {
+  background: #0a0a0a;
+  border-radius: 8px;
+  border: 2px solid #333;
+  min-height: 400px;
+  position: relative;
+  overflow: hidden;
+}
+
+.monitor-stand {
+  width: 60px;
+  height: 40px;
+  background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+  margin: 0 auto;
+  border-radius: 0 0 8px 8px;
+  position: relative;
+}
+
+.monitor-stand::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: -20px;
+  right: -20px;
+  height: 20px;
+  background: linear-gradient(145deg, #333, #222);
+  border-radius: 50px;
+}
+
+.feature-highlights {
+  margin-top: 2rem;
+}
+
+.feature-card {
+  background: rgba(255, 176, 0, 0.05);
+  border: 1px solid rgba(255, 176, 0, 0.2);
+  border-radius: 8px;
+  padding: 1rem;
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  background: rgba(255, 176, 0, 0.1);
+  border-color: rgba(255, 176, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+.command-examples {
+  margin-top: 1.5rem;
+  background: rgba(10, 10, 10, 0.8);
+  backdrop-filter: blur(8px);
+}
+
+/* Responsive design for demo */
+@media (max-width: 768px) {
+  .terminal-demo {
+    padding: 1rem;
+  }
+  
+  .crt-monitor-frame {
+    padding: 12px;
+  }
+  
+  .monitor-chrome {
+    padding: 8px;
+  }
+  
+  .terminal-screen {
+    min-height: 300px;
+  }
+  
+  .feature-highlights {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .command-examples .grid {
+    grid-template-columns: 1fr;
+  }
+}

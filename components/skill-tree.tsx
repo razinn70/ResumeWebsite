@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import ReactFlow, {
   Node,
@@ -139,21 +139,12 @@ const nodeTypes = {
   skillNode: CustomSkillNode,
 };
 
-interface SkillConnectionProps {
-  from: { x: number; y: number };
-  to: { x: number; y: number };
-  status: 'mastered' | 'learning' | 'planned';
-  isActive: boolean;
-  scale: number;
-}
-
 interface SkillTooltipProps {
   skill: Skill;
   position: { x: number; y: number };
-  scale: number;
 }
 
-const SkillTooltip = ({ skill, position, scale }: SkillTooltipProps) => {
+const SkillTooltip = ({ skill, position }: SkillTooltipProps) => {
   const progressBars = '█'.repeat(Math.floor(skill.level)) + 
                       '▓'.repeat(Math.floor((skill.xp / skill.maxXp) * 10) - skill.level) + 
                       '░'.repeat(10 - Math.floor((skill.xp / skill.maxXp) * 10));
@@ -258,7 +249,7 @@ export function SkillTree() {
   }, [allSkills]);
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [edges, , onEdgesChange] = useEdgesState(initialEdges);
 
   // Update nodes when selection changes
   useEffect(() => {
@@ -270,22 +261,7 @@ export function SkillTree() {
           isSelected: selectedSkill?.id === node.id,
         },
       }))
-    );
-  }, [selectedSkill, setNodes]);
-
-  // Terminal commands
-  const handleTerminalCommand = (command: string) => {
-    switch (command.toLowerCase()) {
-      case 'skill --export tree':
-        console.log('Exporting skill tree as PDF...');
-        break;
-      case 'unlock devops':
-        setViewMode('tree');
-        break;
-      default:
-        console.log(`Unknown command: ${command}`);
-    }
-  };
+    );  }, [selectedSkill, setNodes]);
 
   return (
     <section className="py-20 bg-gradient-to-b from-gray-900 to-black min-h-screen">
@@ -438,12 +414,10 @@ export function SkillTree() {
           </div>
 
           {/* Tooltip */}
-          <AnimatePresence>
-            {hoveredSkill && viewMode === 'tree' && (
+          <AnimatePresence>            {hoveredSkill && viewMode === 'tree' && (
               <SkillTooltip
                 skill={hoveredSkill}
                 position={hoveredSkill.position}
-                scale={1}
               />
             )}
           </AnimatePresence>

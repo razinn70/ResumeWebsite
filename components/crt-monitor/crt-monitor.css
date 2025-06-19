@@ -1,0 +1,450 @@
+/* CRT Monitor System Styles */
+
+/* Loading animations */
+@keyframes crt-boot {
+  0% {
+    opacity: 0;
+    transform: scaleY(0.001) scaleX(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleY(0.1) scaleX(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleY(1) scaleX(1);
+  }
+}
+
+@keyframes crt-flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.98; }
+}
+
+@keyframes crt-scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes degauss-effect {
+  0% { 
+    filter: hue-rotate(0deg) saturate(1);
+    transform: scale(1);
+  }
+  25% { 
+    filter: hue-rotate(90deg) saturate(1.5);
+    transform: scale(1.02);
+  }
+  50% { 
+    filter: hue-rotate(180deg) saturate(0.5);
+    transform: scale(0.98);
+  }
+  75% { 
+    filter: hue-rotate(270deg) saturate(1.2);
+    transform: scale(1.01);
+  }
+  100% { 
+    filter: hue-rotate(360deg) saturate(1);
+    transform: scale(1);
+  }
+}
+
+/* CRT Monitor container */
+.crt-monitor-container {
+  position: relative;
+  background: #000;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Control panel styles */
+.crt-controls {
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: white;
+  font-family: 'JetBrains Mono', 'Consolas', monospace;
+}
+
+.crt-controls h3 {
+  color: #00ff00;
+  text-shadow: 0 0 10px #00ff00;
+  margin-bottom: 1rem;
+}
+
+.crt-controls label {
+  color: #cccccc;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.crt-controls select,
+.crt-controls input[type="range"] {
+  background: #333;
+  border: 1px solid #555;
+  color: white;
+  border-radius: 4px;
+}
+
+.crt-controls select:focus,
+.crt-controls input[type="range"]:focus {
+  outline: 2px solid #00ff00;
+  border-color: #00ff00;
+}
+
+.crt-controls button {
+  transition: all 0.2s ease;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.crt-controls button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.crt-controls button:active {
+  transform: translateY(0px);
+}
+
+.crt-controls button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Power button styles */
+.power-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.power-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.power-button:hover::before {
+  left: 100%;
+}
+
+/* Degauss button effect */
+.degauss-button.active {
+  animation: degauss-effect 2s ease-in-out;
+}
+
+/* Performance indicator */
+.performance-info {
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: white;
+  font-family: 'JetBrains Mono', 'Consolas', monospace;
+  font-size: 0.75rem;
+}
+
+.performance-info div {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.25rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.performance-info div:last-child {
+  border-bottom: none;
+}
+
+/* Status indicators */
+.status-on {
+  color: #00ff00;
+  text-shadow: 0 0 5px #00ff00;
+}
+
+.status-off {
+  color: #ff4444;
+  text-shadow: 0 0 5px #ff4444;
+}
+
+.status-warning {
+  color: #ffaa00;
+  text-shadow: 0 0 5px #ffaa00;
+}
+
+/* Instructions panel */
+.instructions {
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: white;
+  font-family: 'JetBrains Mono', 'Consolas', monospace;
+}
+
+.instructions h4 {
+  color: #00ff00;
+  text-shadow: 0 0 10px #00ff00;
+  margin-bottom: 0.5rem;
+}
+
+.instructions ul {
+  list-style: none;
+  padding: 0;
+}
+
+.instructions li {
+  padding: 0.125rem 0;
+  color: #cccccc;
+}
+
+.instructions li::before {
+  content: '▶ ';
+  color: #00ff00;
+  margin-right: 0.25rem;
+}
+
+/* Loading states */
+.crt-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background: #000;
+  color: white;
+  font-family: 'JetBrains Mono', 'Consolas', monospace;
+}
+
+.crt-loading .spinner {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #333;
+  border-top: 2px solid #00ff00;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.crt-loading p {
+  color: #00ff00;
+  text-shadow: 0 0 10px #00ff00;
+  margin: 0;
+  animation: crt-flicker 2s ease-in-out infinite;
+}
+
+/* Feature grid styles */
+.feature-grid {
+  display: grid;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.feature-card {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.feature-card h3 {
+  color: #1f2937;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.feature-card p {
+  color: #6b7280;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+/* Dark mode styles */
+@media (prefers-color-scheme: dark) {
+  .feature-card {
+    background: #1f2937;
+    color: white;
+  }
+  
+  .feature-card h3 {
+    color: white;
+  }
+  
+  .feature-card p {
+    color: #d1d5db;
+  }
+}
+
+/* Technical specs grid */
+.tech-specs-grid {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.tech-spec-card {
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 1rem;
+  border-left: 4px solid #00ff00;
+}
+
+.tech-spec-card h4 {
+  color: #1f2937;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.tech-spec-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tech-spec-card li {
+  color: #6b7280;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  padding: 0.125rem 0;
+}
+
+/* Dark mode tech specs */
+@media (prefers-color-scheme: dark) {
+  .tech-spec-card {
+    background: #1f2937;
+  }
+  
+  .tech-spec-card h4 {
+    color: white;
+  }
+  
+  .tech-spec-card li {
+    color: #d1d5db;
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .crt-controls {
+    margin: 0.5rem;
+    padding: 1rem;
+    width: calc(100% - 1rem);
+  }
+  
+  .performance-info {
+    margin: 0.5rem;
+    padding: 0.75rem;
+    width: calc(100% - 1rem);
+  }
+  
+  .instructions {
+    margin: 0.5rem;
+    padding: 0.75rem;
+    width: calc(100% - 1rem);
+  }
+  
+  .feature-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .tech-specs-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .feature-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .tech-specs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1025px) {
+  .feature-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  .tech-specs-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Accessibility improvements */
+.crt-controls button:focus,
+.crt-controls select:focus,
+.crt-controls input:focus {
+  outline: 2px solid #00ff00;
+  outline-offset: 2px;
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .crt-loading .spinner,
+  .crt-loading p,
+  .feature-card,
+  .power-button::before,
+  .degauss-button {
+    animation: none;
+  }
+  
+  .feature-card:hover {
+    transform: none;
+  }
+  
+  .crt-controls button:hover {
+    transform: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .crt-controls {
+    border: 2px solid white;
+  }
+  
+  .crt-controls button {
+    border: 2px solid currentColor;
+  }
+  
+  .feature-card {
+    border: 2px solid #000;
+  }
+}
+
+/* Print styles */
+@media print {
+  .crt-monitor-container,
+  .crt-controls,
+  .performance-info,
+  .instructions {
+    display: none;
+  }
+  
+  .feature-grid,
+  .tech-specs-grid {
+    break-inside: avoid;
+  }
+}

@@ -11,11 +11,11 @@ interface TerminalNavigationProps {
 export function TerminalNavigation({ className = "" }: TerminalNavigationProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
-
   const navItems = [
     { name: 'about', href: '#about', command: 'cd /about' },
     { name: 'projects', href: '#projects', command: 'ls /projects' },
     { name: 'skills', href: '#skills', command: 'cat /skills.txt' },
+    { name: 'explorer', href: '/file-explorer', command: 'explorer /' },
     { name: 'contact', href: '#contact', command: 'mail contact@' },
   ]
 

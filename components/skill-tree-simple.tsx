@@ -208,7 +208,7 @@ export function SkillTree() {
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
   const [hoveredSkill, setHoveredSkill] = useState<Skill | null>(null);
   const [scale, setScale] = useState(0.8);
-  const [viewMode, setViewMode] = useState<'tree' | 'inventory'>('tree');
+
   const [showTerminal, setShowTerminal] = useState(true);
   const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
@@ -293,7 +293,6 @@ export function SkillTree() {
       };
     }
   }, [isDragging]);
-
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -302,13 +301,8 @@ export function SkillTree() {
         setHoveredSkill(null);
       }
       
-      if (e.key === 'Tab') {
-        e.preventDefault();
-        setViewMode(viewMode === 'tree' ? 'inventory' : 'tree');
-      }
-      
       // Navigate between skills with arrow keys
-      if (viewMode === 'tree' && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
         e.preventDefault();
         const currentIndex = selectedSkill ? allSkills.findIndex(s => s.id === selectedSkill.id) : -1;
         let newIndex = currentIndex;
@@ -331,8 +325,8 @@ export function SkillTree() {
     };
 
     document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [viewMode, selectedSkill, allSkills]);
+    return () => document.removeEventListener('keydown', handleKeyDown);  }, [selectedSkill, allSkills]);
+
   // Enhanced terminal commands
   const handleTerminalCommand = (command: string) => {
     const cmd = command.toLowerCase().trim();
@@ -344,9 +338,7 @@ export function SkillTree() {
         console.log('🚀 Exporting skill tree as PDF...');
         // Mock download functionality
         setTimeout(() => console.log('✅ skill-tree.pdf downloaded!'), 1000);
-        break;
-      case 'unlock devops':
-        setViewMode('tree');
+        break;      case 'unlock devops':
         const devopsSkill = allSkills.find(s => s.category.id === 'devops');
         if (devopsSkill) setSelectedSkill(devopsSkill);
         break;
@@ -356,10 +348,6 @@ export function SkillTree() {
         setSelectedSkill(null);
         setHoveredSkill(null);
         console.log('🔄 View reset to default');
-        break;
-      case 'toggle mode':
-        setViewMode(prev => prev === 'tree' ? 'inventory' : 'tree');
-        console.log(`🔄 Switched to ${viewMode === 'tree' ? 'inventory' : 'tree'} mode`);
         break;
       case 'stats':
         const mastered = allSkills.filter(s => s.status === 'mastered').length;
@@ -382,14 +370,12 @@ export function SkillTree() {
         }
     }
   };
-
   const terminalCommands = useMemo(() => [
     { cmd: 'help', desc: 'Show available commands' },
     { cmd: 'inspect <skill>', desc: 'Inspect a specific skill' },
     { cmd: 'unlock devops', desc: 'Navigate to DevOps section' },
     { cmd: 'skill --export tree', desc: 'Export skill tree (mock)' },
     { cmd: 'reset view', desc: 'Reset zoom and pan' },
-    { cmd: 'toggle mode', desc: 'Switch between tree and inventory' },
     { cmd: 'stats', desc: 'Show skill statistics' },
   ], []);
 
@@ -414,14 +400,7 @@ export function SkillTree() {
                       <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                     </div>
                     <span className="text-terminal-amber font-mono text-sm">skill-tree.exe</span>
-                  </div>
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={() => setViewMode(viewMode === 'tree' ? 'inventory' : 'tree')}
-                      className="px-3 py-1 text-xs bg-terminal-amber/20 text-terminal-amber rounded border border-terminal-amber/30 hover:bg-terminal-amber/30 transition-colors font-mono"
-                    >
-                      {viewMode === 'tree' ? 'INVENTORY' : 'TREE'} MODE
-                    </button>
+                  </div>                  <div className="flex space-x-2">
                     <button
                       onClick={() => handleTerminalCommand('reset view')}
                       className="px-3 py-1 text-xs bg-terminal-green/20 text-terminal-green rounded border border-terminal-green/30 hover:bg-terminal-green/30 transition-colors font-mono"
@@ -505,105 +484,73 @@ export function SkillTree() {
 
           {/* Skill Tree Container */}
           <div 
-            ref={containerRef}
-            className={`relative bg-terminal-black/50 border border-terminal-amber/30 rounded-lg overflow-hidden backdrop-blur-sm ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+            ref={containerRef}            className={`relative bg-terminal-black/50 border border-terminal-amber/30 rounded-lg overflow-hidden backdrop-blur-sm ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
             style={{ height: '600px' }}
           >
-            {viewMode === 'tree' ? (
-              <div 
-                className="relative w-full h-full"
-                style={{
-                  transform: `translate(${panOffset.x}px, ${panOffset.y}px)`
-                }}
-              >
-                {/* SVG for connections */}
-                <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ transform: 'translate(50%, 50%)' }}>
-                  {connections.map((conn, index) => (
-                    <SkillConnection
-                      key={index}
-                      from={conn.from}
-                      to={conn.to}
-                      status={conn.status}
-                      isActive={conn.isActive}
-                      scale={scale}
-                    />
-                  ))}
-                </svg>
+            <div 
+              className="relative w-full h-full"
+              style={{
+                transform: `translate(${panOffset.x}px, ${panOffset.y}px)`
+              }}
+            >
+              {/* SVG for connections */}
+              <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ transform: 'translate(50%, 50%)' }}>
+                {connections.map((conn, index) => (
+                  <SkillConnection
+                    key={index}
+                    from={conn.from}
+                    to={conn.to}
+                    status={conn.status}
+                    isActive={conn.isActive}
+                    scale={scale}
+                  />
+                ))}
+              </svg>
 
-                {/* Category Headers */}
-                <div style={{ transform: 'translate(50%, 50%)' }}>
-                  {data.categories.map((category) => (
-                    <motion.div
-                      key={category.id}
-                      className="absolute font-mono text-lg font-bold"
-                      style={{
-                        left: category.position.x * scale,
-                        top: category.position.y * scale - 40,
-                        color: category.color,
-                        transform: 'translate(-50%, -50%)'
-                      }}
-                      initial={{ opacity: 0, y: -20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.2 }}
-                    >
-                      {category.icon} {category.name}
-                    </motion.div>
-                  ))}
-
-                  {/* Skill Nodes */}
-                  {allSkills.map((skillWithCategory) => (
-                    <SkillNode
-                      key={skillWithCategory.id}
-                      skill={skillWithCategory}
-                      category={skillWithCategory.category}
-                      isSelected={selectedSkill?.id === skillWithCategory.id}
-                      onSelect={setSelectedSkill}
-                      scale={scale}
-                      onHover={setHoveredSkill}
-                    />
-                  ))}
-                </div>
-
-                {/* Tooltip */}
-                <AnimatePresence>
-                  {hoveredSkill && (
-                    <SkillTooltip
-                      skill={hoveredSkill}
-                      position={hoveredSkill.position}
-                      scale={scale}
-                    />
-                  )}
-                </AnimatePresence>
-              </div>
-            ) : (
-              /* Inventory Mode */
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 h-full overflow-y-auto">
-                {allSkills.map((skillWithCategory) => (
+              {/* Category Headers */}
+              <div style={{ transform: 'translate(50%, 50%)' }}>
+                {data.categories.map((category) => (
                   <motion.div
-                    key={skillWithCategory.id}
-                    className="bg-terminal-black/70 border border-terminal-amber/30 rounded-lg p-4 hover:border-terminal-amber/60 transition-all cursor-pointer"
-                    whileHover={{ scale: 1.05, y: -5 }}
-                    onClick={() => setSelectedSkill(skillWithCategory)}
+                    key={category.id}
+                    className="absolute font-mono text-lg font-bold"
+                    style={{
+                      left: category.position.x * scale,
+                      top: category.position.y * scale - 40,
+                      color: category.color,
+                      transform: 'translate(-50%, -50%)'
+                    }}
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
                   >
-                    <div className="text-terminal-amber font-mono font-bold mb-2">
-                      {skillWithCategory.name}
-                    </div>
-                    <div className="text-xs text-terminal-cream mb-2">
-                      Level {skillWithCategory.level}/5
-                    </div>
-                    <div className="w-full bg-gray-700 rounded-full h-2 mb-2">
-                      <div
-                        className="bg-gradient-to-r from-terminal-amber to-terminal-orange h-2 rounded-full transition-all"
-                        style={{ width: `${(skillWithCategory.xp / skillWithCategory.maxXp) * 100}%` }}
-                      />
-                    </div>
-                    <div className="text-xs text-terminal-green">
-                      {skillWithCategory.status.toUpperCase()}
-                    </div>
+                    {category.icon} {category.name}
                   </motion.div>
                 ))}
+
+                {/* Skill Nodes */}
+                {allSkills.map((skillWithCategory) => (
+                  <SkillNode
+                    key={skillWithCategory.id}
+                    skill={skillWithCategory}
+                    category={skillWithCategory.category}
+                    isSelected={selectedSkill?.id === skillWithCategory.id}
+                    onSelect={setSelectedSkill}
+                    scale={scale}
+                    onHover={setHoveredSkill}
+                  />
+                ))}
               </div>
-            )}
+
+              {/* Tooltip */}
+              <AnimatePresence>
+                {hoveredSkill && (
+                  <SkillTooltip
+                    skill={hoveredSkill}
+                    position={hoveredSkill.position}
+                    scale={scale}
+                  />
+                )}              </AnimatePresence>
+            </div>
           </div>
 
           {/* Selected Skill Details */}
