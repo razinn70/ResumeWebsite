@@ -164,20 +164,14 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
         <link rel="dns-prefetch" href="//fonts.gstatic.com" />
-        
-        {/* Icons and manifest */}
-        <link rel="icon" href="/favicon.ico" sizes="32x32" />
+          {/* Icons and manifest */}
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/site.webmanifest" />
         
         {/* Additional meta tags for better mobile experience */}
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content={personal.name} />
-          {/* Preload critical resources */}
-        <link rel="preload" href="/fonts/inter-var.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />        <meta name="apple-mobile-web-app-title" content={personal.name} />
       </head>
       <body 
         className="bg-black text-terminal-amber font-terminal antialiased min-h-screen"

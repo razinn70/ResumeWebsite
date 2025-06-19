@@ -47,7 +47,7 @@ export function EmotionalResonanceProvider({
     if (!analytics?.session) return
 
     const userActions = analytics.session.actions || []
-    const sectionActions = userActions.filter(action => action.section === section)
+    const sectionActions = userActions.filter((action: { section: string }) => action.section === section)
     
     // Analyze behavior patterns
     const persona = cognitiveEngine.analyzeUserBehavior(sectionActions)

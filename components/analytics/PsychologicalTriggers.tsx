@@ -474,9 +474,30 @@ export function LikingHighlight({ trigger, onClose, onConversion }: TriggerProps
   )
 }
 
+// Define the allowed trigger component names
+type TriggerComponentName = 
+  | 'SocialProofNotification'
+  | 'ScarcityNotification'
+  | 'AuthorityBadge'
+  | 'ReciprocityModal'
+  | 'TrustTestimonials'
+  | 'CommitmentTimeline'
+  | 'LikingHighlight';
+
+// Define the effect object structure
+interface TriggerEffect {
+  id: string;
+  component: TriggerComponentName;
+  props: {
+    trigger: any;
+    onClose: () => void;
+    onConversion: () => void;
+  }
+}
+
 // Main Psychological Trigger Renderer
-export function PsychologicalTriggerRenderer({ triggers }: { triggers: any[] }) {
-  const renderTrigger = (effect: any) => {
+export function PsychologicalTriggerRenderer({ triggers }: { triggers: TriggerEffect[] }) {
+  const renderTrigger = (effect: TriggerEffect) => {
     const TriggerComponent = {
       'SocialProofNotification': SocialProofNotification,
       'ScarcityNotification': ScarcityNotification,

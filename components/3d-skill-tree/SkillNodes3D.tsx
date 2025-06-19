@@ -176,14 +176,12 @@ export function SkillNode3D({
         </div>
       </Html>
       
-      {/* Level text */}
-      <Text
+      {/* Level text */}      <Text
         position={[0, 0.3, 0]}
         fontSize={0.08}
         color={skill.glowColor}
         anchorX="center"
         anchorY="middle"
-        font="/fonts/JetBrainsMono-Regular.woff"
       >
         L{skill.level}
       </Text>

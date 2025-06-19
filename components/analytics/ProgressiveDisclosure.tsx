@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronDown, ChevronUp, Eye, EyeOff, Settings, Info } from 'lucide-react'
+import { ChevronDown, ChevronUp, Eye, EyeOff, Settings, Info, Brain } from 'lucide-react'
 import { useProgressiveDisclosure } from '@/lib/progressive-disclosure'
 
 interface ProgressiveDisclosureWrapperProps {

@@ -1,11 +1,19 @@
+'use client'
+
 import { Suspense, lazy } from 'react'
 import { ErrorBoundary } from '@/components/error-boundary'
+import { Enhanced3DErrorBoundary } from '@/components/error-boundary/Enhanced3DErrorBoundary'
+import { LazySection, PerformanceNotice } from '@/components/performance'
+import { SystemMonitor } from '@/components/monitoring/SystemMonitor'
+import { LoadingScreen } from '@/components/loading/LoadingScreen'
+import { ServiceWorkerRegistration } from '@/components/optimization/ServiceWorkerRegistration'
 import RetroBootHero from '@/components/retro-boot-hero'
 import { TerminalNavigation } from '@/components/terminal-navigation'
 import { ScrollTransition, ScrollReveal } from '@/components/scroll-transition'
 import { RetroThemeToggle } from '@/components/retro-theme-toggle'
 import TerminalSection from '@/components/terminal-section'
 import CRTMonitorSection from '@/components/crt-monitor/CRTMonitorSection'
+import { usePerformanceOptimization } from '@/hooks/usePerformanceOptimization'
 
 // Analytics Components
 import { 
@@ -22,7 +30,7 @@ const RetroProjects = lazy(() => import('@/components/retro-projects'))
 const TerminalAbout = lazy(() => import('@/components/terminal-about'))
 const TerminalFooter = lazy(() => import('@/components/terminal-footer'))
 const Contact = lazy(() => import('@/components/contact').then(m => ({ default: m.Contact })))
-const SkillTree3D = lazy(() => import('@/components/3d-skill-tree').then(m => ({ default: m.SkillTree3D })))
+const SkillTree3D = lazy(() => import('@/components/3d-skill-tree/SkillTree3D'))
 
 // Structured data for SEO
 const structuredData = {
@@ -55,10 +63,16 @@ const SectionSkeleton = () => (
   </div>
 )
 
-export default function Home() {  return (
-    <ClientOnlyAnalytics
+export default function Home() {
+  const performanceConfig = usePerformanceOptimization()
+  return (
+    <>
+      <ServiceWorkerRegistration />
+      <LoadingScreen />
+      <ClientOnlyAnalytics
       enableAnalytics={true}
-      enableDashboard={process.env.NODE_ENV === 'development'}      enableTriggers={true}
+      enableDashboard={process.env.NODE_ENV === 'development'}
+      enableTriggers={true}
       enableProgressive={true}
       developmentMode={process.env.NODE_ENV === 'development'}
     >
@@ -86,24 +100,37 @@ export default function Home() {  return (
           showVisualization={process.env.NODE_ENV === 'development'}
           sensitivity={1.2}
           className="fixed inset-0 pointer-events-none z-40"
-        />
-
-        {/* Terminal Hero Section - loads immediately */}
+        />        {/* Terminal Hero Section - loads immediately */}
         <ScrollTransition>
-          <ErrorBoundary fallback={<div>Error loading terminal</div>}>
+          <Enhanced3DErrorBoundary section="Hero Terminal">
             <EmotionalResonanceProvider
               section="hero"
               targetEmotion="curiosity"
               className="section-hero"
             >
-              <RetroBootHero 
-                name="Rajin Uddin"
-                roles={["Software Engineer", "Digital Designer", "Full-Stack Developer"]}
-                systemName="rajin-linux"
-              />
+              {performanceConfig.enable3D ? (
+                <RetroBootHero 
+                  name="Rajin Uddin"
+                  roles={["Software Engineer", "Digital Designer", "Full-Stack Developer"]}
+                  systemName="rajin-linux"
+                />
+              ) : (
+                <div className="min-h-screen flex items-center justify-center bg-black text-green-400">
+                  <div className="text-center max-w-2xl px-4">
+                    <h1 className="text-4xl md:text-6xl font-bold mb-4">Rajin Uddin</h1>
+                    <p className="text-xl md:text-2xl mb-8">Software Engineer & Full-Stack Developer</p>
+                    <div className="text-left font-mono text-sm md:text-base">
+                      <p>$ whoami</p>
+                      <p className="text-green-300">rajin-uddin</p>
+                      <p>$ cat skills.txt</p>
+                      <p className="text-green-300">JavaScript, TypeScript, React, Next.js, Node.js, Python...</p>
+                    </div>
+                  </div>
+                </div>
+              )}
             </EmotionalResonanceProvider>
-          </ErrorBoundary>
-        </ScrollTransition>        {/* About Section with Analytics */}
+          </Enhanced3DErrorBoundary>
+        </ScrollTransition>{/* About Section with Analytics */}
         <ScrollReveal>
           <ErrorBoundary fallback={<div>Error loading about section</div>}>
             <AnalyticsEnhancedSection
@@ -132,7 +159,7 @@ export default function Home() {  return (
           </ErrorBoundary>
         </ScrollReveal>        {/* Skills Section with A/B Testing */}
         <ScrollReveal delay={0.1}>
-          <ErrorBoundary fallback={<div>Error loading skills section</div>}>
+          <Enhanced3DErrorBoundary section="3D Skills Tree">
             <AnalyticsEnhancedSection
               id="skills"
               className="section-skills"
@@ -143,31 +170,59 @@ export default function Home() {  return (
                 targetEmotion="admiration"
                 className="section-skills-emotional"
               >
-                <Suspense fallback={<SectionSkeleton />}>
-                  <SkillTree3D />
-                </Suspense>
+                {performanceConfig.enable3D ? (
+                  <LazySection
+                    fallback={<SectionSkeleton />}
+                    rootMargin="200px"
+                  >
+                    <Suspense fallback={<SectionSkeleton />}>
+                      <SkillTree3D />
+                    </Suspense>
+                  </LazySection>
+                ) : (
+                  <div className="py-20 text-center">
+                    <h2 className="text-3xl font-bold mb-4">Skills & Technologies</h2>
+                    <p className="text-gray-600 dark:text-gray-300">
+                      3D skills visualization disabled for better performance.
+                    </p>
+                  </div>
+                )}
               </EmotionalResonanceProvider>
             </AnalyticsEnhancedSection>
-          </ErrorBoundary>
-        </ScrollReveal>{/* CRT Monitor Section - Advanced 3D CRT simulation with Analytics */}
+          </Enhanced3DErrorBoundary>
+        </ScrollReveal>        {/* CRT Monitor Section - Advanced 3D CRT simulation with Analytics */}
         <ScrollReveal delay={0.15}>
-          <ErrorBoundary fallback={<div>Error loading CRT monitor section</div>}>
+          <Enhanced3DErrorBoundary section="CRT Monitor">
             <AnalyticsEnhancedSection
               id="crt-experience"
               className="section-crt"
               enableProgressive={false}
             >
-              <Suspense fallback={<SectionSkeleton />}>
-                <CRTMonitorSection
-                  title="Photorealistic CRT Monitor Experience"
-                  description="Experience the most advanced CRT monitor simulation ever created. Features authentic physics, real phosphor persistence, magnetic field effects, and environmental integration."
-                  showControls={true}
-                  height="800px"
-                  className="py-20 bg-gradient-to-b from-gray-900 to-black"
-                />
-              </Suspense>
+              {performanceConfig.enable3D ? (
+                <LazySection
+                  fallback={<SectionSkeleton />}
+                  rootMargin="300px"
+                >
+                  <Suspense fallback={<SectionSkeleton />}>
+                    <CRTMonitorSection
+                      title="Photorealistic CRT Monitor Experience"
+                      description="Experience the most advanced CRT monitor simulation ever created. Features authentic physics, real phosphor persistence, magnetic field effects, and environmental integration."
+                      showControls={true}
+                      height="800px"
+                      className="py-20 bg-gradient-to-b from-gray-900 to-black"
+                    />
+                  </Suspense>
+                </LazySection>
+              ) : (
+                <div className="py-20 text-center">
+                  <h2 className="text-3xl font-bold mb-4">CRT Monitor Experience</h2>
+                  <p className="text-gray-600 dark:text-gray-300">
+                    3D CRT simulation disabled for better performance.
+                  </p>
+                </div>
+              )}
             </AnalyticsEnhancedSection>
-          </ErrorBoundary>
+          </Enhanced3DErrorBoundary>
         </ScrollReveal>
 
         {/* Terminal Section - integrated into the main page structure */}
@@ -221,12 +276,16 @@ export default function Home() {  return (
               </EmotionalResonanceProvider>
             </AnalyticsEnhancedSection>
           </ErrorBoundary>
-        </ScrollReveal></main>      
+        </ScrollReveal>      </main>      
       
       <ErrorBoundary fallback={<div>Error loading footer</div>}>
         <Suspense fallback={<SectionSkeleton />}>
           <TerminalFooter />        </Suspense>
-      </ErrorBoundary>
+      </ErrorBoundary>      {/* Performance Notice - shows when optimizations are active */}
+      <PerformanceNotice />
+        {/* System Monitor - development and debugging */}
+      <SystemMonitor />
     </ClientOnlyAnalytics>
+    </>
   )
 }

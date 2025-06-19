@@ -388,15 +388,13 @@ const CRTMonitor = forwardRef<CRTMonitorRef, CRTMonitorProps>(({
       />
       
       {/* Control Labels */}
-      {crtModel.hasControls && Object.entries(crtModel.controlLayout).map(([controlName, control]) => (
-        <Text
+      {crtModel.hasControls && Object.entries(crtModel.controlLayout).map(([controlName, control]) => (        <Text
           key={controlName}
           position={[control.position.x, control.position.y - 0.015, control.position.z]}
           fontSize={0.003}
           color="#333"
           anchorX="center"
           anchorY="middle"
-          font="/fonts/monospace.woff"
         >
           {control.label}
         </Text>
