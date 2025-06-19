@@ -1,0 +1,433 @@
+{
+  "skillTreeConfig": {
+    "metadata": {
+      "version": "2.0.0",
+      "lastUpdated": "2025-06-18",
+      "totalNodes": 18,
+      "maxDepth": 4,
+      "bootSequence": "skill-os-v2.1.0"
+    },
+    "terminalCommands": {
+      "basic": [
+        { "cmd": "help", "desc": "Show all available commands", "category": "system" },
+        { "cmd": "clear", "desc": "Clear terminal output", "category": "system" },
+        { "cmd": "whoami", "desc": "Display user info", "category": "system" },
+        { "cmd": "tree", "desc": "Display skill tree structure", "category": "navigation" },
+        { "cmd": "map", "desc": "Show interactive node map", "category": "navigation" }
+      ],
+      "advanced": [
+        { "cmd": "inspect <skill>", "desc": "Deep dive into skill details", "category": "analysis" },
+        { "cmd": "upgrade <skill>", "desc": "Simulate skill progression", "category": "simulation" },
+        { "cmd": "unlock <category>", "desc": "Focus on skill category", "category": "navigation" },
+        { "cmd": "connect <skill1> <skill2>", "desc": "Show skill relationships", "category": "analysis" },
+        { "cmd": "export skills.pdf", "desc": "Generate resume snapshot", "category": "utility" },
+        { "cmd": "sudo ai-mode", "desc": "🤖 Activate secret mode", "category": "easter-egg" }
+      ],
+      "system": [
+        { "cmd": "reboot", "desc": "Restart skill tree animation", "category": "system" },
+        { "cmd": "status", "desc": "Show system diagnostics", "category": "system" },
+        { "cmd": "version", "desc": "Display OS version info", "category": "system" }
+      ]
+    },
+    "bootSequence": [
+      "SKILL-OS v2.1.0 initializing...",
+      "Loading neural pathways...",
+      "Mapping knowledge graph...",
+      "████████████████████████ 100%",
+      "System ready. Type 'help' for commands.",
+      "> _"
+    ],
+    "aiModeSecrets": {
+      "trigger": "sudo ai-mode",
+      "responses": [
+        "🤖 AI Mode Activated...",
+        "Scanning developer capabilities...",
+        "Neural networks: ONLINE",
+        "Creativity modules: ENHANCED",
+        "Easter egg unlocked: Matrix rain effect enabled",
+        "Welcome to the machine, Neo."
+      ],
+      "effects": ["matrix-rain", "enhanced-glow", "ai-voice-synthesis"]
+    }
+  },
+  "skillTree": {
+    "categories": [
+      {
+        "id": "core-programming",
+        "name": "Core Programming",
+        "icon": "🧠",
+        "color": "#ffbf00",
+        "glowIntensity": 1.2,
+        "position": { "x": 0, "y": 0, "z": 0 },
+        "description": "Fundamental programming languages and paradigms",
+        "skills": [
+          {
+            "id": "javascript",
+            "name": "JavaScript",
+            "level": 5,
+            "xp": 950,
+            "maxXp": 1000,
+            "status": "mastered",
+            "learnedVia": "5+ years experience",
+            "position": { "x": -100, "y": 0, "z": 20 },
+            "description": "Dynamic programming language powering modern web",
+            "linkedTo": [],
+            "certifications": ["ES6+", "Node.js Certified"],
+            "projects": ["Portfolio Website", "E-commerce Platform", "Real-time Chat App"],
+            "strengthAreas": ["Async Programming", "Functional Programming", "DOM Manipulation"],
+            "learningPath": "Self-taught → Bootcamp → Professional Experience",
+            "marketValue": "High",
+            "trendingScore": 95,
+            "glowColor": "#f7df1e",
+            "particleEffect": "spark"
+          },
+          {
+            "id": "typescript",
+            "name": "TypeScript",
+            "level": 4,
+            "xp": 720,
+            "maxXp": 1000,
+            "status": "mastered",
+            "learnedVia": "Professional projects",
+            "position": { "x": 100, "y": 50, "z": 20 },
+            "description": "Statically typed superset of JavaScript",
+            "linkedTo": ["javascript"],
+            "certifications": ["Microsoft TypeScript"],
+            "projects": ["Enterprise Dashboard", "API Gateway"],
+            "strengthAreas": ["Type Safety", "Interface Design", "Generic Programming"],
+            "learningPath": "JavaScript → TypeScript Migration",
+            "marketValue": "Very High",
+            "trendingScore": 98,
+            "glowColor": "#3178c6",
+            "particleEffect": "electric"
+          },
+          {
+            "id": "python",
+            "name": "Python",
+            "level": 4,
+            "xp": 680,
+            "maxXp": 1000,
+            "status": "mastered",
+            "position": { "x": 0, "y": 100, "z": 20 },
+            "description": "Versatile language for web, AI, and automation",
+            "linkedTo": [],
+            "certifications": ["Python Institute PCAP"],
+            "projects": ["ML Pipeline", "Web Scraper", "API Services"],
+            "strengthAreas": ["Data Science", "Web Development", "Automation"],
+            "learningPath": "University → Personal Projects",
+            "marketValue": "High",
+            "trendingScore": 92,
+            "glowColor": "#3776ab",
+            "particleEffect": "flow"
+          }
+        ]
+      },
+      {
+        "id": "frontend-mastery",
+        "name": "Frontend Mastery",
+        "icon": "🎨",
+        "color": "#00ff41",
+        "glowIntensity": 1.1,
+        "position": { "x": 300, "y": -100, "z": 0 },
+        "description": "User interface and experience technologies",
+        "skills": [
+          {
+            "id": "react",
+            "name": "React",
+            "level": 5,
+            "xp": 900,
+            "maxXp": 1000,
+            "status": "mastered",
+            "learnedVia": "Professional + Open Source",
+            "position": { "x": 400, "y": -150, "z": 30 },
+            "description": "Component-based UI library for modern interfaces",
+            "linkedTo": ["javascript", "typescript"],
+            "certifications": ["React Professional Developer"],
+            "projects": ["Enterprise SPA", "Component Library", "Social Platform"],
+            "strengthAreas": ["Hooks", "Context API", "Performance Optimization"],
+            "learningPath": "Bootcamp → Professional → OSS Contributor",
+            "marketValue": "Very High",
+            "trendingScore": 96,
+            "glowColor": "#61dafb",
+            "particleEffect": "orbit"
+          },
+          {
+            "id": "nextjs",
+            "name": "Next.js",
+            "level": 4,
+            "xp": 750,
+            "maxXp": 1000,
+            "status": "mastered",
+            "position": { "x": 600, "y": -150, "z": 30 },
+            "description": "React framework with SSR and full-stack capabilities",
+            "linkedTo": ["react"],
+            "certifications": ["Vercel Next.js Expert"],
+            "projects": ["Portfolio Site", "E-commerce Store", "Blog Platform"],
+            "strengthAreas": ["SSR/SSG", "API Routes", "Performance"],
+            "learningPath": "React → Next.js Migration",
+            "marketValue": "Very High",
+            "trendingScore": 94,
+            "glowColor": "#000000",
+            "particleEffect": "pulse"
+          },
+          {
+            "id": "tailwind",
+            "name": "Tailwind CSS",
+            "level": 5,
+            "xp": 880,
+            "maxXp": 1000,
+            "status": "mastered",
+            "position": { "x": 400, "y": -50, "z": 30 },
+            "description": "Utility-first CSS framework for rapid UI development",
+            "linkedTo": ["react"],
+            "certifications": ["Tailwind CSS Expert"],
+            "projects": ["Design System", "Responsive Layouts", "Component Library"],
+            "strengthAreas": ["Responsive Design", "Custom Components", "Theme Configuration"],
+            "learningPath": "CSS → Tailwind Adoption",
+            "marketValue": "High",
+            "trendingScore": 89,
+            "glowColor": "#06b6d4",
+            "particleEffect": "wave"
+          },
+          {
+            "id": "threejs",
+            "name": "Three.js",
+            "level": 3,
+            "xp": 450,
+            "maxXp": 1000,
+            "status": "learning",
+            "position": { "x": 600, "y": -50, "z": 30 },
+            "description": "3D graphics library for immersive web experiences",
+            "linkedTo": ["javascript"],
+            "certifications": [],
+            "projects": ["3D Portfolio", "WebGL Experiments"],
+            "strengthAreas": ["3D Modeling", "Shaders", "WebGL"],
+            "learningPath": "Self-learning → Current Project",
+            "marketValue": "Medium",
+            "trendingScore": 78,
+            "glowColor": "#ff6b6b",
+            "particleEffect": "spiral"
+          }
+        ]
+      },
+      {
+        "id": "backend-systems",
+        "name": "Backend Systems",
+        "icon": "⚙️",
+        "color": "#ff8c00",
+        "glowIntensity": 1.0,
+        "position": { "x": 300, "y": 100, "z": 0 },
+        "description": "Server-side technologies and system architecture",
+        "skills": [
+          {
+            "id": "nodejs",
+            "name": "Node.js",
+            "level": 4,
+            "xp": 700,
+            "maxXp": 1000,
+            "status": "mastered",
+            "position": { "x": 400, "y": 50, "z": 30 },
+            "description": "JavaScript runtime for scalable server applications",
+            "linkedTo": ["javascript"],
+            "certifications": ["Node.js Application Developer"],
+            "projects": ["REST APIs", "Microservices", "Real-time Apps"],
+            "strengthAreas": ["Express.js", "Async/Await", "Stream Processing"],
+            "learningPath": "JavaScript → Server-side Development",
+            "marketValue": "High",
+            "trendingScore": 91,
+            "glowColor": "#339933",
+            "particleEffect": "stream"
+          },
+          {
+            "id": "express",
+            "name": "Express.js",
+            "level": 4,
+            "xp": 680,
+            "maxXp": 1000,
+            "status": "mastered",
+            "position": { "x": 600, "y": 50, "z": 30 },
+            "description": "Fast, unopinionated web framework for Node.js",
+            "linkedTo": ["nodejs"],
+            "certifications": [],
+            "projects": ["API Gateway", "Authentication Service", "File Upload Service"],
+            "strengthAreas": ["Middleware", "Routing", "Security"],
+            "learningPath": "Node.js → Express Framework",
+            "marketValue": "High",
+            "trendingScore": 87,
+            "glowColor": "#000000",
+            "particleEffect": "network"
+          },
+          {
+            "id": "fastapi",
+            "name": "FastAPI",
+            "level": 3,
+            "xp": 400,
+            "maxXp": 1000,
+            "status": "learning",
+            "position": { "x": 400, "y": 150, "z": 30 },
+            "description": "Modern, fast Python web framework for APIs",
+            "linkedTo": ["python"],
+            "certifications": [],
+            "projects": ["ML API", "Data Processing Service"],
+            "strengthAreas": ["API Documentation", "Type Hints", "Async Support"],
+            "learningPath": "Python → API Development",
+            "marketValue": "Medium",
+            "trendingScore": 82,
+            "glowColor": "#009688",
+            "particleEffect": "boost"
+          }
+        ]
+      },
+      {
+        "id": "data-persistence",
+        "name": "Data & Persistence",
+        "icon": "🗄️",
+        "color": "#32cd32",
+        "glowIntensity": 0.9,
+        "position": { "x": 600, "y": 200, "z": 0 },
+        "description": "Database technologies and data management",
+        "skills": [
+          {
+            "id": "mongodb",
+            "name": "MongoDB",
+            "level": 4,
+            "xp": 650,
+            "maxXp": 1000,
+            "status": "mastered",
+            "position": { "x": 700, "y": 150, "z": 40 },
+            "description": "NoSQL document database for flexible data storage",
+            "linkedTo": ["nodejs"],
+            "certifications": ["MongoDB Developer"],
+            "projects": ["User Management System", "Content CMS", "Analytics Platform"],
+            "strengthAreas": ["Aggregation", "Indexing", "Replication"],
+            "learningPath": "SQL → NoSQL Transition",
+            "marketValue": "High",
+            "trendingScore": 85,
+            "glowColor": "#47a248",
+            "particleEffect": "cluster"
+          },
+          {
+            "id": "postgresql",
+            "name": "PostgreSQL",
+            "level": 3,
+            "xp": 420,
+            "maxXp": 1000,
+            "status": "learning",
+            "position": { "x": 700, "y": 250, "z": 40 },
+            "description": "Advanced open-source relational database",
+            "linkedTo": ["python", "nodejs"],
+            "certifications": [],
+            "projects": ["Analytics Dashboard", "Inventory System"],
+            "strengthAreas": ["Complex Queries", "JSONB", "Performance Tuning"],
+            "learningPath": "University → Professional Projects",
+            "marketValue": "High",
+            "trendingScore": 88,
+            "glowColor": "#336791",
+            "particleEffect": "matrix"
+          }
+        ]
+      },
+      {
+        "id": "devops-cloud",
+        "name": "DevOps & Cloud",
+        "icon": "🚀",
+        "color": "#ff6b6b",
+        "glowIntensity": 1.3,
+        "position": { "x": 800, "y": 0, "z": 0 },
+        "description": "Deployment, infrastructure, and cloud technologies",
+        "skills": [
+          {
+            "id": "docker",
+            "name": "Docker",
+            "level": 3,
+            "xp": 380,
+            "maxXp": 1000,
+            "status": "learning",
+            "position": { "x": 900, "y": -50, "z": 50 },
+            "description": "Containerization platform for application deployment",
+            "linkedTo": ["nodejs", "python"],
+            "certifications": [],
+            "projects": ["Microservices", "Development Environment"],
+            "strengthAreas": ["Container Orchestration", "Docker Compose", "Image Optimization"],
+            "learningPath": "Professional → Learning Path",
+            "marketValue": "Very High",
+            "trendingScore": 93,
+            "glowColor": "#2496ed",
+            "particleEffect": "container"
+          },
+          {
+            "id": "git",
+            "name": "Git",
+            "level": 4,
+            "xp": 720,
+            "maxXp": 1000,
+            "status": "mastered",
+            "position": { "x": 900, "y": 50, "z": 50 },
+            "description": "Distributed version control system",
+            "linkedTo": [],
+            "certifications": ["Git Professional"],
+            "projects": ["All Projects", "Open Source Contributions"],
+            "strengthAreas": ["Branching", "Merging", "Collaboration"],
+            "learningPath": "University → Professional",
+            "marketValue": "Essential",
+            "trendingScore": 99,
+            "glowColor": "#f05032",
+            "particleEffect": "branch"
+          },
+          {
+            "id": "vercel",
+            "name": "Vercel",
+            "level": 4,
+            "xp": 650,
+            "maxXp": 1000,
+            "status": "mastered",
+            "position": { "x": 1100, "y": 0, "z": 50 },
+            "description": "Frontend deployment platform with edge functions",
+            "linkedTo": ["nextjs"],
+            "certifications": [],
+            "projects": ["Portfolio Deployment", "Static Sites", "Serverless APIs"],
+            "strengthAreas": ["Edge Functions", "Analytics", "Preview Deployments"],
+            "learningPath": "Next.js → Vercel Platform",
+            "marketValue": "Medium",
+            "trendingScore": 86,
+            "glowColor": "#000000",
+            "particleEffect": "deploy"
+          }
+        ]
+      }
+    ],
+    "connections": [
+      { "from": "javascript", "to": "react", "type": "prerequisite", "strength": 0.9 },
+      { "from": "javascript", "to": "nodejs", "type": "evolution", "strength": 0.8 },
+      { "from": "javascript", "to": "typescript", "type": "enhancement", "strength": 0.7 },
+      { "from": "react", "to": "nextjs", "type": "framework", "strength": 0.9 },
+      { "from": "nodejs", "to": "express", "type": "framework", "strength": 0.8 },
+      { "from": "python", "to": "fastapi", "type": "framework", "strength": 0.7 },
+      { "from": "nodejs", "to": "mongodb", "type": "integration", "strength": 0.6 },
+      { "from": "nextjs", "to": "vercel", "type": "deployment", "strength": 0.8 }
+    ],
+    "globalStats": {
+      "totalXP": 9650,
+      "masteredSkills": 11,
+      "learningSkills": 5,
+      "averageLevel": 4.1,
+      "completionRate": 68.5,
+      "trendinessScore": 89.2
+    },
+    "visualEffects": {
+      "nodeConnections": {
+        "defaultColor": "#ffbf00",
+        "activeColor": "#00ff41",
+        "pulseSpeed": 2.0,
+        "thickness": 2
+      },
+      "particleSystems": {
+        "spark": { "count": 20, "speed": 0.5, "color": "#f7df1e" },
+        "electric": { "count": 30, "speed": 0.8, "color": "#3178c6" },
+        "flow": { "count": 25, "speed": 0.6, "color": "#3776ab" },
+        "orbit": { "count": 40, "speed": 1.0, "color": "#61dafb" },
+        "pulse": { "count": 15, "speed": 0.4, "color": "#000000" }
+      }
+    }
+  }
+}
