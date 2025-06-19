@@ -7,6 +7,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
 
+/* Import Terminal CSS */
+@import '../components/terminal/terminal.css';
+
+/* Import CRT Monitor CSS */
+@import '../components/crt-monitor/crt-monitor.css';
+
 @layer base {
   /* CSS Custom Properties for enhanced theming */
   :root {

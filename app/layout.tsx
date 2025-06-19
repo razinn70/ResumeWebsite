@@ -176,10 +176,10 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content={personal.name} />
-        
-        {/* Preload critical resources */}
+          {/* Preload critical resources */}
         <link rel="preload" href="/fonts/inter-var.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
-      </head>      <body 
+      </head>
+      <body 
         className="bg-black text-terminal-amber font-terminal antialiased min-h-screen"
         suppressHydrationWarning
       >
@@ -201,8 +201,8 @@ export default function RootLayout({
                 </p>
               </div>
             </div>
-          </div>
-        </noscript>        <ClientProviders
+          </div>        </noscript>
+        <ClientProviders
           attribute="class"
           defaultTheme="dark"
           enableSystem={false}
