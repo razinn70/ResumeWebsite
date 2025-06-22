@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronDown, ChevronUp, Eye, EyeOff, Settings, Info, Brain } from 'lucide-react'
+import { ChevronDown, ChevronUp, Settings, Info, Brain } from 'lucide-react'
 import { useProgressiveDisclosure } from '@/lib/progressive-disclosure'
 
 interface ProgressiveDisclosureWrapperProps {
@@ -16,20 +16,17 @@ interface ProgressiveDisclosureWrapperProps {
 
 export function ProgressiveDisclosureWrapper({
   contentId,
-  section,
   children,
   className = '',
   showControls = true,
   title
 }: ProgressiveDisclosureWrapperProps) {
-  const { content, currentContent, setUserPreference } = useProgressiveDisclosure(contentId)
+  const { content, setUserPreference } = useProgressiveDisclosure(contentId)
   const [isExpanded, setIsExpanded] = useState(false)
   const [showPreferences, setShowPreferences] = useState(false)
 
   if (!content) return <>{children}</>
-
   const canExpand = content.currentLevel < content.levels.length
-  const canCollapse = content.currentLevel > 1
 
   return (
     <div className={`progressive-disclosure-wrapper ${className}`}>
@@ -209,10 +206,8 @@ export function ProgressiveDisclosureWrapper({
               )}
             </AnimatePresence>
           </div>
-        )}
-        
-        {/* Fallback children if no progressive content is defined */}
-        {!currentContent && children}
+        )}        {/* Fallback children if no progressive content is defined */}
+        {!content && children}
       </div>
     </div>
   )

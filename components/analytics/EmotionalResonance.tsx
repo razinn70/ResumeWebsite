@@ -23,7 +23,6 @@ interface EmotionalTrigger {
 
 export function EmotionalResonanceProvider({ 
   section, 
-  targetEmotion, 
   children, 
   className = '' 
 }: EmotionalResonanceProps) {
@@ -47,7 +46,7 @@ export function EmotionalResonanceProvider({
     if (!analytics?.session) return
 
     const userActions = analytics.session.actions || []
-    const sectionActions = userActions.filter((action: { section: string }) => action.section === section)
+    const sectionActions = userActions.filter((action: any) => action.section === section)
     
     // Analyze behavior patterns
     const persona = cognitiveEngine.analyzeUserBehavior(sectionActions)
@@ -174,7 +173,7 @@ export function EmotionalResonanceProvider({
 
       {/* Emotional Triggers */}
       <AnimatePresence>
-        {activeEmotionalTriggers.map((trigger, index) => (
+        {activeEmotionalTriggers.map((trigger) => (
           <EmotionalTriggerComponent
             key={trigger.id}
             trigger={trigger}

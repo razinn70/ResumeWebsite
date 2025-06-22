@@ -7,8 +7,7 @@ import {
   Clock, 
   Users, 
   Award, 
-  Gift, 
-  TrendingUp,
+  Gift,
   CheckCircle,
   ArrowRight,
   X
@@ -21,7 +20,7 @@ interface TriggerProps {
 }
 
 // Social Proof Notification Component
-export function SocialProofNotification({ trigger, onClose, onConversion }: TriggerProps) {
+export function SocialProofNotification({ onClose, onConversion }: TriggerProps) {
   return (
     <motion.div
       initial={{ opacity: 0, x: 300 }}
@@ -77,7 +76,7 @@ export function SocialProofNotification({ trigger, onClose, onConversion }: Trig
 }
 
 // Scarcity Notification Component
-export function ScarcityNotification({ trigger, onClose, onConversion }: TriggerProps) {
+export function ScarcityNotification({ onClose, onConversion }: TriggerProps) {
   const [timeLeft, setTimeLeft] = React.useState(24 * 60 * 60) // 24 hours in seconds
 
   React.useEffect(() => {
@@ -135,7 +134,7 @@ export function ScarcityNotification({ trigger, onClose, onConversion }: Trigger
 }
 
 // Authority Badge Component
-export function AuthorityBadge({ trigger, onClose, onConversion }: TriggerProps) {
+export function AuthorityBadge({ onClose, onConversion }: TriggerProps) {
   const credentials = [
     'AWS Certified',
     'React Expert',
@@ -184,7 +183,7 @@ export function AuthorityBadge({ trigger, onClose, onConversion }: TriggerProps)
 }
 
 // Reciprocity Modal Component
-export function ReciprocityModal({ trigger, onClose, onConversion }: TriggerProps) {
+export function ReciprocityModal({ onClose, onConversion }: TriggerProps) {
   const freeResources = [
     'React Component Library',
     'API Best Practices Guide',
@@ -266,7 +265,7 @@ export function ReciprocityModal({ trigger, onClose, onConversion }: TriggerProp
 }
 
 // Trust Testimonials Component
-export function TrustTestimonials({ trigger, onClose, onConversion }: TriggerProps) {
+export function TrustTestimonials({ onClose, onConversion }: TriggerProps) {
   const testimonials = [
     {
       name: 'Sarah Chen',
@@ -353,7 +352,7 @@ export function TrustTestimonials({ trigger, onClose, onConversion }: TriggerPro
 }
 
 // Commitment Timeline Component
-export function CommitmentTimeline({ trigger, onClose, onConversion }: TriggerProps) {
+export function CommitmentTimeline({ onClose, onConversion }: TriggerProps) {
   const commitments = [
     { phase: 'Discovery', duration: '1-2 weeks', description: 'Requirements & planning' },
     { phase: 'Development', duration: '4-8 weeks', description: 'Building & testing' },
@@ -417,7 +416,7 @@ export function CommitmentTimeline({ trigger, onClose, onConversion }: TriggerPr
 }
 
 // Liking Highlight Component
-export function LikingHighlight({ trigger, onClose, onConversion }: TriggerProps) {
+export function LikingHighlight({ onClose, onConversion }: TriggerProps) {
   const sharedInterests = [
     'Clean Code',
     'System Design',
@@ -474,31 +473,10 @@ export function LikingHighlight({ trigger, onClose, onConversion }: TriggerProps
   )
 }
 
-// Define the allowed trigger component names
-type TriggerComponentName = 
-  | 'SocialProofNotification'
-  | 'ScarcityNotification'
-  | 'AuthorityBadge'
-  | 'ReciprocityModal'
-  | 'TrustTestimonials'
-  | 'CommitmentTimeline'
-  | 'LikingHighlight';
-
-// Define the effect object structure
-interface TriggerEffect {
-  id: string;
-  component: TriggerComponentName;
-  props: {
-    trigger: any;
-    onClose: () => void;
-    onConversion: () => void;
-  }
-}
-
 // Main Psychological Trigger Renderer
-export function PsychologicalTriggerRenderer({ triggers }: { triggers: TriggerEffect[] }) {
-  const renderTrigger = (effect: TriggerEffect) => {
-    const TriggerComponent = {
+export function PsychologicalTriggerRenderer({ triggers }: { triggers: any[] }) {
+  const renderTrigger = (effect: any) => {
+    const componentMap: Record<string, React.ComponentType<TriggerProps>> = {
       'SocialProofNotification': SocialProofNotification,
       'ScarcityNotification': ScarcityNotification,
       'AuthorityBadge': AuthorityBadge,
@@ -506,7 +484,9 @@ export function PsychologicalTriggerRenderer({ triggers }: { triggers: TriggerEf
       'TrustTestimonials': TrustTestimonials,
       'CommitmentTimeline': CommitmentTimeline,
       'LikingHighlight': LikingHighlight
-    }[effect.component]
+    }
+    
+    const TriggerComponent = componentMap[effect.component]
 
     if (!TriggerComponent) return null
 

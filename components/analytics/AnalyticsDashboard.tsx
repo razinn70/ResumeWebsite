@@ -1,10 +1,9 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   BarChart3, 
-  Users, 
   Target, 
   TrendingUp, 
   Eye, 
@@ -12,9 +11,7 @@ import {
   MousePointer,
   Zap,
   Brain,
-  Settings,
-  Download,
-  RefreshCw
+  Settings
 } from 'lucide-react'
 import { useUserJourneyTracker } from '@/lib/user-journey-tracker'
 import { useABTest } from '@/lib/ab-test-manager'
@@ -288,7 +285,7 @@ function JourneyTab({ journey, actions, heatmapData }: any) {
 
 // A/B Tests Tab Component
 function ABTestsTab() {
-  const { activeVariant, testResults, getResults } = useABTest('hero_section_cta')
+  const { activeVariant, getResults } = useABTest('hero_section_cta')
 
   return (
     <div className="space-y-4">

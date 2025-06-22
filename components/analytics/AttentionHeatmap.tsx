@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { motion } from 'framer-motion'
-import { Eye, EyeOff, Crosshair, Activity } from 'lucide-react'
+import { Eye, Crosshair, Activity } from 'lucide-react'
 import { CognitivePsychologyEngine, AttentionPattern } from '@/lib/cognitive-psychology'
 import { useAnalytics } from '@/components/analytics'
 
@@ -37,7 +37,6 @@ export function AttentionHeatmapTracker({
 }: AttentionHeatmapProps) {
   const analytics = useAnalytics()
   const containerRef = useRef<HTMLDivElement>(null)
-  const [cognitiveEngine] = useState(() => new CognitivePsychologyEngine())
   const [heatmapData, setHeatmapData] = useState<HeatmapData>({
     points: [],
     clusters: [],

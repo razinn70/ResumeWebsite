@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "build:test": "next build",
+    "start:prod": "next start",
+    "analyze": "cross-env ANALYZE=true next build",
+    "type-check": "tsc --noEmit",
+    "lint:fix": "next lint --fix"
+  }
+}

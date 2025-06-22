@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
-import { BarChart3, Brain, Target, Eye, Settings } from 'lucide-react'
+import { BarChart3, Brain } from 'lucide-react'
 
 // Import all analytics modules
 import { useUserJourneyTracker } from '@/lib/user-journey-tracker'
@@ -13,7 +13,7 @@ import { useProgressiveDisclosure } from '@/lib/progressive-disclosure'
 // Import components
 import AnalyticsDashboard from './AnalyticsDashboard'
 import { PsychologicalTriggerRenderer } from './PsychologicalTriggers'
-import { ProgressiveDisclosureWrapper, CognitiveLoadIndicator } from './ProgressiveDisclosure'
+import { ProgressiveDisclosureWrapper } from './ProgressiveDisclosure'
 
 interface UserAnalyticsProviderProps {
   children: React.ReactNode
@@ -29,7 +29,6 @@ export function UserAnalyticsProvider({
   enableAnalytics = true,
   enableDashboard = false,
   enableTriggers = true,
-  enableProgressive = true,
   developmentMode = false
 }: UserAnalyticsProviderProps) {
   const [isDashboardVisible, setIsDashboardVisible] = useState(developmentMode)

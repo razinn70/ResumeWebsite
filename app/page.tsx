@@ -18,7 +18,6 @@ import { usePerformanceOptimization } from '@/hooks/usePerformanceOptimization'
 // Analytics Components
 import { 
   AnalyticsEnhancedSection,
-  ABTestVariant,
   ProgressiveDisclosureWrapper,
   EmotionalResonanceProvider,
   AttentionHeatmapTracker
