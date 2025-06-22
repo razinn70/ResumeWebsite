@@ -1,4 +1,3 @@
-/** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
     domains: ['github.com', 'githubusercontent.com'],
@@ -21,18 +20,22 @@ const nextConfig = {
             value: 'origin-when-cross-origin',
           },
         ],
-      },    ]
-  },  // Disable ESLint during build for now
+      },
+    ]
+  },
+  // Completely disable linting during build
   eslint: {
     ignoreDuringBuilds: true,
   },
-  // Disable TypeScript checking during build
+  // Disable TypeScript checking during build  
   typescript: {
     ignoreBuildErrors: true,
   },
-  // Experimental features for better performance
+  // Optimize for production
+  swcMinify: true,
+  // Handle experimental features
   experimental: {
-    optimizePackageImports: ['@react-three/fiber', '@react-three/drei'],
+    optimizePackageImports: ['@react-three/fiber', '@react-three/drei', 'three'],
   },
 }
 
