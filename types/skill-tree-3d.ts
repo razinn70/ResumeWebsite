@@ -41,7 +41,7 @@ export interface SkillConnection {
   to: string;
   type: string;
   strength: number;
-  color: string;
+  color?: string;
 }
 
 /**
@@ -95,11 +95,10 @@ export interface SkillTreeConfig {
     bootSequence: string;
   };
   terminalCommands: TerminalCommands;
-  bootSequence: string[];
-  aiModeSecrets: {
-    unlockCommand: string;
-    hiddenNodes: string[];
-    matrixMode: boolean;
+  bootSequence: string[];  aiModeSecrets: {
+    trigger: string;
+    responses: string[];
+    effects: string[];
   };
 }
 

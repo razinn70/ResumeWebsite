@@ -321,12 +321,11 @@ const CRTMonitorDemo: React.FC<CRTMonitorDemoProps> = ({
                 position={new Vector3(0, -0.5, 0)}
                 rotation={new Vector3(0, 0, 0)}
                 scale={new Vector3(1, 1, 1)}
-                screenContent={screenContent}
-                autoPlay={isPoweredOn}
+                screenContent={screenContent}                autoPlay={isPoweredOn}
                 quality={quality}
                 events={{
-                  onPowerToggle: (isOn) => setIsPoweredOn(isOn),
-                  onControlChange: (control, value) => {
+                  onPowerToggle: (isOn: boolean) => setIsPoweredOn(isOn),
+                  onControlChange: (control: string, value: number) => {
                     if (control === 'brightness') setBrightness(value);
                     if (control === 'contrast') setContrast(value);
                   }
@@ -342,13 +341,12 @@ const CRTMonitorDemo: React.FC<CRTMonitorDemoProps> = ({
                 model={selectedModel}
                 position={new Vector3(0, 0, 0)}
                 rotation={new Vector3(0, 0, 0)}
-                scale={new Vector3(1, 1, 1)}
-                screenContent={screenContent}
+                scale={new Vector3(1, 1, 1)}                screenContent={screenContent}
                 autoPlay={isPoweredOn}
                 quality={quality}
                 events={{
-                  onPowerToggle: (isOn) => setIsPoweredOn(isOn),
-                  onControlChange: (control, value) => {
+                  onPowerToggle: (isOn: boolean) => setIsPoweredOn(isOn),
+                  onControlChange: (control: string, value: number) => {
                     if (control === 'brightness') setBrightness(value);
                     if (control === 'contrast') setContrast(value);
                   }

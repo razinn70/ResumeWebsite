@@ -286,11 +286,10 @@ export function SkillTree3D({ className = "", showDebug = false }: SkillTree3DPr
           const categoryName = cmd.replace('unlock ', '')
           const category = data.categories.find((c: SkillCategory3D) => 
             c.name.toLowerCase().includes(categoryName) ||
-            c.id.toLowerCase().includes(categoryName)
-          )
+            c.id.toLowerCase().includes(categoryName)          )
           
           if (category && category.skills.length > 0) {
-            setSelectedSkill(category.skills[0])
+            setSelectedSkill(category.skills[0] || null)
             console.log(`🔓 Unlocked ${category.name} category`)
           } else {
             console.log(`❌ Category '${categoryName}' not found.`)

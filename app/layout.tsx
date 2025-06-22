@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { ClientProviders } from '../components/client-providers'
+import { GlobalErrorBoundary } from '../components/error-boundary/GlobalErrorBoundary'
 import { portfolioData } from '../data/portfolio'
 
 // Optimized font loading with fallbacks and display strategies
@@ -38,7 +39,7 @@ const cspHeader = `
 
 // Centralized metadata using portfolio data
 const { personal } = portfolioData
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://rajinuddin.dev'
+const siteUrl = process.env['NEXT_PUBLIC_SITE_URL'] || 'https://rajinuddin.dev'
 
 export const metadata: Metadata = {
   title: {
@@ -120,8 +121,8 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },  verification: {
-    google: process.env.GOOGLE_SITE_VERIFICATION || 'your-google-site-verification',
-    yandex: process.env.YANDEX_VERIFICATION,
+    google: process.env['GOOGLE_SITE_VERIFICATION'] || 'your-google-site-verification',
+    yandex: process.env['YANDEX_VERIFICATION'] || undefined,
   },
   category: 'technology',
   classification: 'personal portfolio',
@@ -195,15 +196,20 @@ export default function RootLayout({
                 </p>
               </div>
             </div>
-          </div>        </noscript>
-        <ClientProviders
+          </div>        </noscript>        <ClientProviders
           attribute="class"
           defaultTheme="dark"
           enableSystem={false}
           disableTransitionOnChange={false}
           storageKey="portfolio-theme"
         >
-          {children}
+          <GlobalErrorBoundary
+            enableRetry={true}
+            maxRetries={3}
+            showErrorDetails={process.env.NODE_ENV === 'development'}
+          >
+            {children}
+          </GlobalErrorBoundary>
           {/* Retro Theme Toggle */}
           <div suppressHydrationWarning>
             <script

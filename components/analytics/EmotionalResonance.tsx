@@ -160,12 +160,11 @@ export function EmotionalResonanceProvider({
           duration: 1 / (visualAdaptations.animationSpeed || 1)
         }
       }}
-    >
-      {/* Emotional State Indicator (Development Mode) */}
+    >      {/* Emotional State Indicator (Development Mode) */}
       {process.env.NODE_ENV === 'development' && emotionalState && (
         <EmotionalStateIndicator 
           emotional={emotionalState}
-          persona={userPersona}
+          {...(userPersona && { persona: userPersona })}
           resonanceScore={resonanceScore}
           section={section}
         />

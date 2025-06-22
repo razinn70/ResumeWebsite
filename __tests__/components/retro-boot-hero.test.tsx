@@ -2,8 +2,10 @@
  * @jest-environment jsdom
  */
 
+import React from 'react'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import { RetroBootHero } from '@/components/retro-boot-hero'
+import '@testing-library/jest-dom'
+import RetroBootHero from '@/components/retro-boot-hero'
 
 // Mock framer-motion to avoid animation issues in tests
 jest.mock('framer-motion', () => ({

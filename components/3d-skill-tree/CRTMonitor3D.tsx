@@ -70,16 +70,15 @@ function CRTMonitor({ children, matrixMode = false }: CRTScreenProps) {
     resolution: { value: new THREE.Vector2(80, 60) },
     matrixColor: { value: new THREE.Color('#00ff41') }
   }), [])
-  
-  useFrame((state) => {
+    useFrame((state) => {
     const time = state.clock.elapsedTime
     
-    if (materialRef.current) {
-      materialRef.current.uniforms.time.value = time
+    if (materialRef.current?.uniforms?.['time']) {
+      materialRef.current.uniforms['time'].value = time
     }
     
-    if (matrixRef.current && matrixMode) {
-      matrixRef.current.uniforms.time.value = time
+    if (matrixRef.current?.uniforms?.['time'] && matrixMode) {
+      matrixRef.current.uniforms['time'].value = time
     }
   })
   

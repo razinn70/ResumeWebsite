@@ -354,11 +354,10 @@ export class CommandRegistry {
   private setAlias(alias: string, command: string) {
     this.aliases.set(alias, command)
   }
-
   getCommand(name: string): TerminalCommand | undefined {
     const aliasedCommand = this.aliases.get(name)
     if (aliasedCommand) {
-      name = aliasedCommand.split(' ')[0]
+      name = aliasedCommand.split(' ')[0] || ''
     }
     return this.commands.get(name)
   }
@@ -499,9 +498,8 @@ export class CommandRegistry {
         error: 'Not a directory'
       }
     }
-    
-    context.currentDirectory = resolvedPath
-    context.environment.PWD = resolvedPath
+      context.currentDirectory = resolvedPath
+    context.environment['PWD'] = resolvedPath
     
     return { output: [], exitCode: 0 }
   }

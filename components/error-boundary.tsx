@@ -9,7 +9,7 @@ interface Props {
 
 interface State {
   hasError: boolean
-  error?: Error
+  error?: Error | undefined
 }
 
 export class ErrorBoundary extends Component<Props, State> {
@@ -22,7 +22,7 @@ export class ErrorBoundary extends Component<Props, State> {
     return { hasError: true, error }
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  override componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('ErrorBoundary caught an error:', error, errorInfo)
     
     // Log to error reporting service in production
@@ -31,7 +31,7 @@ export class ErrorBoundary extends Component<Props, State> {
     }
   }
 
-  render() {
+  override render() {
     if (this.state.hasError) {
       return this.props.fallback || (
         <div className="py-20 px-4 text-center">

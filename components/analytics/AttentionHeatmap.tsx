@@ -201,16 +201,17 @@ export function AttentionHeatmapTracker({
     })
 
     // Find high-density clusters
-    Object.entries(grid).forEach(([key, cellPoints]) => {
-      if (cellPoints.length >= 5) { // Minimum points for a cluster
+    Object.entries(grid).forEach(([key, cellPoints]) => {      if (cellPoints.length >= 5) { // Minimum points for a cluster
         const [gridX, gridY] = key.split(',').map(Number)
-        const avgIntensity = cellPoints.reduce((sum, p) => sum + p.intensity, 0) / cellPoints.length
-        
-        clusters.push({
-          x: gridX * gridSize + gridSize / 2,
-          y: gridY * gridSize + gridSize / 2,
-          strength: cellPoints.length * avgIntensity
-        })
+        if (gridX !== undefined && gridY !== undefined) {
+          const avgIntensity = cellPoints.reduce((sum, p) => sum + p.intensity, 0) / cellPoints.length
+          
+          clusters.push({
+            x: gridX * gridSize + gridSize / 2,
+            y: gridY * gridSize + gridSize / 2,
+            strength: cellPoints.length * avgIntensity
+          })
+        }
       }
     })
 
@@ -267,9 +268,10 @@ export function AttentionHeatmapTracker({
     points.forEach(point => {
       const gridX = Math.floor((point.x / rect.width) * gridWidth)
       const gridY = Math.floor((point.y / rect.height) * gridHeight)
-      
-      if (gridX >= 0 && gridX < gridWidth && gridY >= 0 && gridY < gridHeight) {
-        grid[gridY][gridX] += point.intensity
+        if (gridX >= 0 && gridX < gridWidth && gridY >= 0 && gridY < gridHeight) {
+        if (grid[gridY] && grid[gridY][gridX] !== undefined) {
+          grid[gridY][gridX] += point.intensity
+        }
       }
     })
 
@@ -279,22 +281,23 @@ export function AttentionHeatmapTracker({
   // Calculate backtracking frequency
   const calculateBacktrackingFrequency = (points: AttentionPoint[]) => {
     let backtrackCount = 0
-    
-    for (let i = 2; i < points.length; i++) {
+      for (let i = 2; i < points.length; i++) {
       const current = points[i]
       const previous = points[i - 1]
       const beforePrevious = points[i - 2]
       
-      // Check if current position is closer to before-previous than previous
-      const distToPrev = Math.sqrt(
-        Math.pow(current.x - previous.x, 2) + Math.pow(current.y - previous.y, 2)
-      )
-      const distToBeforePrev = Math.sqrt(
-        Math.pow(current.x - beforePrevious.x, 2) + Math.pow(current.y - beforePrevious.y, 2)
-      )
-      
-      if (distToBeforePrev < distToPrev * 0.7) {
-        backtrackCount++
+      if (current && previous && beforePrevious) {
+        // Check if current position is closer to before-previous than previous
+        const distToPrev = Math.sqrt(
+          Math.pow(current.x - previous.x, 2) + Math.pow(current.y - previous.y, 2)
+        )
+        const distToBeforePrev = Math.sqrt(
+          Math.pow(current.x - beforePrevious.x, 2) + Math.pow(current.y - beforePrevious.y, 2)
+        )
+        
+        if (distToBeforePrev < distToPrev * 0.7) {
+          backtrackCount++
+        }
       }
     }
     
@@ -423,9 +426,10 @@ function AttentionHeatmapVisualization({
       ))}
 
       {/* Scan Path */}
-      <svg className="absolute inset-0 w-full h-full">
-        {data.scanPath.slice(0, -1).map((point, index) => {
+      <svg className="absolute inset-0 w-full h-full">        {data.scanPath.slice(0, -1).map((point, index) => {
           const nextPoint = data.scanPath[index + 1]
+          if (!nextPoint) return null
+          
           return (
             <motion.line
               key={`path-${index}`}

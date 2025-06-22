@@ -276,9 +276,7 @@ export function SkillTree() {
 
     const handleMouseUp = () => {
       setIsDragging(false);
-    };
-
-    const container = containerRef.current;
+    };    const container = containerRef.current;
     if (container) {
       container.addEventListener('wheel', handleWheel, { passive: false });
       container.addEventListener('mousedown', handleMouseDown);
@@ -292,6 +290,8 @@ export function SkillTree() {
         document.removeEventListener('mouseup', handleMouseUp);
       };
     }
+    
+    return undefined; // No cleanup needed if container not available
   }, [isDragging]);
   // Keyboard navigation
   useEffect(() => {
@@ -317,9 +317,11 @@ export function SkillTree() {
             newIndex = currentIndex < allSkills.length - 1 ? currentIndex + 1 : 0;
             break;
         }
-        
-        if (newIndex >= 0 && newIndex < allSkills.length) {
-          setSelectedSkill(allSkills[newIndex]);
+          if (newIndex >= 0 && newIndex < allSkills.length) {
+          const selectedSkillAtIndex = allSkills[newIndex];
+          if (selectedSkillAtIndex) {
+            setSelectedSkill(selectedSkillAtIndex);
+          }
         }
       }
     };

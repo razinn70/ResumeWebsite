@@ -81,10 +81,10 @@ export const FileExplorer: React.FC<FileExplorerProps> = ({
             searchQuery={searchQuery}
           />
         );
-      
-      case 'git':
+        case 'git':
         return (
           <GitPanel
+            project={project}
             repository={project.gitRepository}
             onFileSelect={handleFileSelect}
           />
@@ -134,11 +134,10 @@ export const FileExplorer: React.FC<FileExplorerProps> = ({
 
       {/* Sidebar */}
       <AnimatePresence>
-        {(sidebarOpen || !isMobile) && (
-          <motion.div
+        {(sidebarOpen || !isMobile) && (          <motion.div
             initial={isMobile ? { x: -320 } : false}
             animate={{ x: 0 }}
-            exit={isMobile ? { x: -320 } : undefined}
+            exit={isMobile ? { x: -320 } : {}}
             transition={{ type: 'spring', damping: 20 }}
             className={`
               ${isMobile ? 'fixed inset-y-0 left-0 z-40' : 'relative'}
@@ -190,12 +189,11 @@ export const FileExplorer: React.FC<FileExplorerProps> = ({
       </AnimatePresence>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {selectedFile ? (
+      <div className="flex-1 flex flex-col overflow-hidden">        {selectedFile ? (
           <CodeViewer
             file={selectedFile}
             content={getFileContent(selectedFile)}
-            project={project}
+            {...(project && { project })}
           />
         ) : (
           <div className="flex-1 flex items-center justify-center text-gray-400">

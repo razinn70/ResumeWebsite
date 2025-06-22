@@ -55,6 +55,9 @@ export interface PsychologicalTrigger {
     pageViews?: number
     deviceType?: string[]
     returningVisitor?: boolean
+    currentSection?: string
+    interactionCount?: number
+    exitIntent?: boolean
   }
   metrics: {
     impressions: number

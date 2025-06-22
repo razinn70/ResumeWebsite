@@ -56,11 +56,10 @@ export function TerminalShell({
     const bootLines: TerminalLine[] = []
     
     const bootInterval = setInterval(() => {
-      if (currentIndex < bootSequence.length) {
-        const newLine: TerminalLine = {
+      if (currentIndex < bootSequence.length) {        const newLine: TerminalLine = {
           id: `boot-${currentIndex}`,
           type: 'system',
-          content: bootSequence[currentIndex],
+          content: bootSequence[currentIndex] || '',
           timestamp: Date.now()
         }
         bootLines.push(newLine)
@@ -89,8 +88,7 @@ export function TerminalShell({
       terminalRef.current.scrollTop = terminalRef.current.scrollHeight
     }
   }, [lines])
-  
-  // Focus input when clicking terminal
+    // Focus input when clicking terminal
   useEffect(() => {
     const terminal = terminalRef.current
     if (terminal) {
@@ -98,6 +96,7 @@ export function TerminalShell({
       terminal.addEventListener('click', handleClick)
       return () => terminal.removeEventListener('click', handleClick)
     }
+    return undefined // explicit return for when terminal is null
   }, [])
   
   // Play typing sound
@@ -257,10 +256,9 @@ export function TerminalShell({
         e.preventDefault()
         executeCommand(currentInput)
         break
-        
-      case 'Tab':
+          case 'Tab':
         e.preventDefault()
-        if (autoComplete.length > 0) {
+        if (autoComplete.length > 0 && autoComplete[0]) {
           setCurrentInput(autoComplete[0])
           setShowAutoComplete(false)
         }
@@ -268,12 +266,11 @@ export function TerminalShell({
         
       case 'ArrowUp':
         e.preventDefault()
-        if (commandHistory.length > 0) {
-          const newIndex = historyIndex === -1 
+        if (commandHistory.length > 0) {          const newIndex = historyIndex === -1 
             ? commandHistory.length - 1 
             : Math.max(0, historyIndex - 1)
           setHistoryIndex(newIndex)
-          setCurrentInput(commandHistory[newIndex])
+          setCurrentInput(commandHistory[newIndex] || '')
         }
         break
         
@@ -284,7 +281,7 @@ export function TerminalShell({
             ? historyIndex + 1 
             : -1
           setHistoryIndex(newIndex)
-          setCurrentInput(newIndex === -1 ? '' : commandHistory[newIndex])
+          setCurrentInput(newIndex === -1 ? '' : commandHistory[newIndex] || '')
         }
         break
         

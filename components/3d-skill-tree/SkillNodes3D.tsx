@@ -106,14 +106,14 @@ export function SkillNode3D({
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
     return geometry
   }, [skill.level])
-  
-  useFrame((state) => {
+    useFrame((state) => {
     const time = state.clock.elapsedTime
     
-    if (materialRef.current) {
-      materialRef.current.uniforms.time.value = time
-      materialRef.current.uniforms.selected.value = isSelected ? 1.0 : 0.0
-      materialRef.current.uniforms.hovered.value = isHovered ? 1.0 : 0.0
+    if (materialRef.current?.uniforms) {
+      const uniforms = materialRef.current.uniforms
+      if (uniforms['time']) uniforms['time'].value = time
+      if (uniforms['selected']) uniforms['selected'].value = isSelected ? 1.0 : 0.0
+      if (uniforms['hovered']) uniforms['hovered'].value = isHovered ? 1.0 : 0.0
     }
     
     // Rotate particles based on skill type
@@ -223,11 +223,11 @@ export function Connection3D({ from, to, color, isActive, animationSpeed }: Conn
     animationSpeed: { value: animationSpeed },
     opacity: { value: isActive ? 1.0 : 0.3 }
   }), [color, animationSpeed, isActive])
-  
-  useFrame((state) => {
-    if (materialRef.current) {
-      materialRef.current.uniforms.time.value = state.clock.elapsedTime
-      materialRef.current.uniforms.opacity.value = isActive ? 1.0 : 0.3
+    useFrame((state) => {
+    if (materialRef.current?.uniforms) {
+      const uniforms = materialRef.current.uniforms
+      if (uniforms['time']) uniforms['time'].value = state.clock.elapsedTime
+      if (uniforms['opacity']) uniforms['opacity'].value = isActive ? 1.0 : 0.3
     }
   })
   return (

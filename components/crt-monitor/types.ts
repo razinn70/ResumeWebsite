@@ -475,4 +475,6 @@ export interface CRTMonitorRef {
   updatePhysics: (deltaTime: number) => void;
   optimizePerformance: () => void;
   reset: () => void;
+  cleanup: () => void;
+  getStats: () => any;
 }

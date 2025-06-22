@@ -1,81 +1,131 @@
+/**
+ * PRODUCTION-READY CRT SHADERS
+ * Optimized for performance and compatibility across devices
+ */
+
 // CRT Monitor Vertex Shader
 export const crtVertexShader = `
   varying vec2 vUv;
   varying vec3 vPosition;
+  varying vec3 vNormal;
   
   void main() {
     vUv = uv;
     vPosition = position;
+    vNormal = normal;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
   }
 `;
 
-// CRT Monitor Fragment Shader with scanlines, curvature, and glow
+// CRT Monitor Fragment Shader with enhanced effects
 export const crtFragmentShader = `
+  #ifdef GL_ES
+  precision mediump float;
+  #endif
+  
   uniform sampler2D tDiffuse;
   uniform float time;
   uniform float intensity;
   uniform float curvature;
   uniform float scanlineIntensity;
   uniform float noiseIntensity;
+  uniform float glowIntensity;
   uniform vec3 glowColor;
+  uniform vec2 resolution;
+  uniform bool enableCurvature;
+  uniform bool enableScanlines;
+  uniform bool enableNoise;
+  uniform bool enableGlow;
   
   varying vec2 vUv;
   
-  // CRT Curvature function
+  // Safe CRT curvature function with bounds checking
   vec2 curveUV(vec2 uv) {
+    if (!enableCurvature) return uv;
+    
     uv = uv * 2.0 - 1.0;
-    vec2 offset = abs(uv.yx) / vec2(curvature, curvature);
+    vec2 offset = abs(uv.yx) / max(curvature, 0.1); // Prevent division by zero
     uv = uv + uv * offset * offset;
     uv = uv * 0.5 + 0.5;
-    return uv;
+    
+    // Clamp to prevent texture sampling outside bounds
+    return clamp(uv, 0.0, 1.0);
   }
   
-  // Random noise function
+  // Optimized random function
   float random(vec2 st) {
     return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
   }
   
-  // Scanline effect
+  // Enhanced scanline effect
   float scanline(vec2 uv) {
-    return sin(uv.y * 800.0) * 0.04 * scanlineIntensity;
+    if (!enableScanlines) return 0.0;
+    
+    float scanlines = sin(uv.y * resolution.y * 0.8) * 0.04 * scanlineIntensity;
+    float horizontal = sin(uv.x * resolution.x * 0.1) * 0.01 * scanlineIntensity;
+    return scanlines + horizontal;
   }
   
-  // Phosphor glow effect
+  // Phosphor glow effect with better performance
   vec3 phosphorGlow(vec3 color, vec2 uv) {
-    float glow = 1.0 - distance(uv, vec2(0.5));
+    if (!enableGlow) return color;
+    
+    float dist = distance(uv, vec2(0.5));
+    float glow = 1.0 - smoothstep(0.0, 0.7, dist);
     glow = pow(glow, 2.0);
-    return color + glowColor * glow * 0.3;
+    return color + glowColor * glow * glowIntensity * 0.3;
+  }
+  
+  // Chromatic aberration effect
+  vec3 chromaticAberration(sampler2D tex, vec2 uv) {
+    vec2 offset = (uv - 0.5) * 2.0;
+    float aberration = length(offset) * 0.01;
+    
+    float r = texture2D(tex, uv + offset * aberration).r;
+    float g = texture2D(tex, uv).g;
+    float b = texture2D(tex, uv - offset * aberration).b;
+    
+    return vec3(r, g, b);
   }
   
   void main() {
     vec2 curvedUV = curveUV(vUv);
     
-    // Sample the texture
-    vec4 color = texture2D(tDiffuse, curvedUV);
+    // Check bounds for curved display
+    if (enableCurvature && (curvedUV.x < 0.0 || curvedUV.x > 1.0 || curvedUV.y < 0.0 || curvedUV.y > 1.0)) {
+      gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+      return;
+    }
+    
+    // Sample with chromatic aberration
+    vec3 color = chromaticAberration(tDiffuse, curvedUV);
     
     // Add scanlines
-    float scanlines = scanline(curvedUV);
-    color.rgb -= scanlines;
+    if (enableScanlines) {
+      float scanlines = scanline(curvedUV);
+      color -= scanlines;
+    }
     
-    // Add noise/static
-    float noise = random(curvedUV + time * 0.01) * noiseIntensity;
-    color.rgb += noise * 0.05;
+    // Add noise/static with time variance
+    if (enableNoise) {
+      float noise = random(curvedUV + sin(time * 0.1) * 0.01) * noiseIntensity;
+      color += noise * 0.05;
+    }
     
     // Add phosphor glow
-    color.rgb = phosphorGlow(color.rgb, curvedUV);
+    if (enableGlow) {
+      color = phosphorGlow(color, curvedUV);
+    }
     
     // Vignette effect
     float vignette = 1.0 - distance(curvedUV, vec2(0.5));
     vignette = smoothstep(0.3, 0.7, vignette);
-    color.rgb *= vignette;
+    color *= vignette;
     
-    // Edge detection for out-of-bounds
-    if (curvedUV.x < 0.0 || curvedUV.x > 1.0 || curvedUV.y < 0.0 || curvedUV.y > 1.0) {
-      color = vec4(0.0, 0.0, 0.0, 1.0);
-    }
+    // Brightness adjustment
+    color *= intensity;
     
-    gl_FragColor = color;
+    gl_FragColor = vec4(color, 1.0);
   }
 `;
 

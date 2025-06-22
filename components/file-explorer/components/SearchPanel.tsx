@@ -7,10 +7,16 @@ import { ProjectStructure, FileSystemNode } from '../types';
 interface SearchPanelProps {
   project: ProjectStructure;
   onFileSelect: (file: FileSystemNode) => void;
+  searchQuery: string;
+  onSearchChange: (query: string) => void;
 }
 
-export const SearchPanel: React.FC<SearchPanelProps> = ({ project, onFileSelect }) => {
-  const [searchQuery, setSearchQuery] = useState('');
+export const SearchPanel: React.FC<SearchPanelProps> = ({ 
+  project, 
+  onFileSelect, 
+  searchQuery, 
+  onSearchChange 
+}) => {
   const [searchResults, setSearchResults] = useState<FileSystemNode[]>([]);
   const [searchType, setSearchType] = useState<'all' | 'files' | 'code'>('all');
 
@@ -43,9 +49,8 @@ export const SearchPanel: React.FC<SearchPanelProps> = ({ project, onFileSelect 
     searchInNode(project.root);
     setSearchResults(results.slice(0, 50)); // Limit results
   };
-
   const handleSearch = (query: string) => {
-    setSearchQuery(query);
+    onSearchChange(query);
     searchFiles(query, searchType);
   };
 

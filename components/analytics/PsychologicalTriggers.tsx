@@ -314,24 +314,23 @@ export function TrustTestimonials({ onClose, onConversion }: TriggerProps) {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: 20 }}
-          transition={{ duration: 0.3 }}
-        >
+          transition={{ duration: 0.3 }}        >
           <div className="mb-3">
             <div className="flex items-center mb-2">
-              {[...Array(testimonials[currentIndex].rating)].map((_, i) => (
+              {testimonials[currentIndex] && [...Array(testimonials[currentIndex].rating)].map((_, i) => (
                 <Star key={i} className="w-4 h-4 text-yellow-500 fill-current" />
               ))}
             </div>
             <p className="text-sm text-gray-600 dark:text-gray-400 italic">
-              "{testimonials[currentIndex].content}"
+              "{testimonials[currentIndex]?.content}"
             </p>
           </div>
           <div className="text-xs">
             <div className="font-medium text-gray-900 dark:text-white">
-              {testimonials[currentIndex].name}
+              {testimonials[currentIndex]?.name}
             </div>
             <div className="text-gray-500">
-              {testimonials[currentIndex].role}
+              {testimonials[currentIndex]?.role}
             </div>
           </div>
         </motion.div>

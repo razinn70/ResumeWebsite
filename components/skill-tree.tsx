@@ -2,8 +2,9 @@
 
 import { useState, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import ReactFlow, {
-  Node,
+import {
+  ReactFlow,
+  Node as FlowNode,
   Edge,
   Controls,
   Background,
@@ -11,15 +12,17 @@ import ReactFlow, {
   useEdgesState,
   ConnectionMode,
   ReactFlowProvider,
-} from 'reactflow'
-import 'reactflow/dist/style.css'
+  Handle,
+  Position,
+  NodeProps,
+} from '@xyflow/react'
+// Note: CSS import removed to avoid TypeScript errors
+// import '@xyflow/react/dist/style.css'
 import { Skill, SkillCategory, SkillTreeData } from '../types/skills'
 import skillsData from '../data/skills.json'
 
 // Custom Skill Node Component for ReactFlow
-import { Handle, Position, NodeProps } from 'reactflow'
-
-interface SkillNodeData {
+interface SkillNodeData extends Record<string, unknown> {
   skill: Skill;
   category: SkillCategory;
   onSelect: (skill: Skill) => void;
@@ -27,8 +30,9 @@ interface SkillNodeData {
   isSelected: boolean;
 }
 
-const CustomSkillNode = ({ data, selected }: NodeProps<SkillNodeData>) => {
-  const { skill, category, onSelect, onHover, isSelected } = data;
+const CustomSkillNode = ({ data, selected }: NodeProps) => {
+  const skillData = data as SkillNodeData;
+  const { skill, category, onSelect, onHover, isSelected } = skillData;
   const progressPercentage = (skill.xp / skill.maxXp) * 100;
   
   const getStatusColor = (status: string) => {
@@ -194,10 +198,9 @@ export function SkillTree() {
       category.skills.map(skill => ({ ...skill, category }))
     );
   }, [data]);
-
   // Create nodes for ReactFlow
-  const initialNodes: Node[] = useMemo(() => {
-    const nodes: Node[] = [];
+  const initialNodes: FlowNode[] = useMemo(() => {
+    const nodes: FlowNode[] = [];
     
     data.categories.forEach((category) => {
       category.skills.forEach((skill) => {
@@ -211,7 +214,7 @@ export function SkillTree() {
             onSelect: setSelectedSkill,
             onHover: setHoveredSkill,
             isSelected: selectedSkill?.id === skill.id,
-          },
+          } as SkillNodeData,
         });
       });
     });

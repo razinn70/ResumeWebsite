@@ -67,10 +67,9 @@ const CRTScreenMaterial = () => {
     curvature: { value: 6.0 },
     vignette: { value: 0.8 }
   }), [])
-  
-  useFrame((state) => {
-    if (materialRef.current) {
-      materialRef.current.uniforms.time.value = state.clock.elapsedTime
+    useFrame((state) => {
+    if (materialRef.current?.uniforms?.['time']) {
+      materialRef.current.uniforms['time'].value = state.clock.elapsedTime
     }
   })
   

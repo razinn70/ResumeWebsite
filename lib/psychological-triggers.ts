@@ -163,69 +163,89 @@ class PsychologicalTriggerEngine {
   public addTrigger(trigger: PsychologicalTrigger): void {
     this.triggers.set(trigger.id, trigger)
   }
-
   public checkTriggers(conditions: TriggerConditions): TriggerEffect[] {
-    const effects: TriggerEffect[] = []
+    try {
+      const effects: TriggerEffect[] = []
 
-    for (const [id, trigger] of this.triggers) {
-      if (this.shouldTrigger(trigger, conditions)) {
-        const effect = this.createTriggerEffect(trigger)
-        if (effect) {
-          effects.push(effect)
-          this.recordTriggerFired(id)
-          trigger.metrics.impressions++
+      for (const [id, trigger] of this.triggers) {
+        if (this.shouldTrigger(trigger, conditions)) {
+          const effect = this.createTriggerEffect(trigger)
+          if (effect) {
+            effects.push(effect)
+            this.recordTriggerFired(id)
+            trigger.metrics.impressions++
+            
+            // Notify callback if set
+            if (this.onTriggerCallback) {
+              try {
+                this.onTriggerCallback(trigger, effect)
+              } catch (callbackError) {
+                console.warn('Trigger callback error:', callbackError)
+              }
+            }
+          }
         }
       }
-    }
 
-    // Sort by priority (higher priority first)
-    return effects.sort((a, b) => b.priority - a.priority)
+      // Sort by priority (higher priority first)
+      return effects.sort((a, b) => b.priority - a.priority)
+    } catch (error) {
+      console.error('Error checking triggers:', error)
+      return []
+    }
   }
-
   private shouldTrigger(trigger: PsychologicalTrigger, conditions: TriggerConditions): boolean {
-    // Check if trigger is on cooldown
-    if (this.isOnCooldown(trigger.id)) return false
+    try {
+      // Validate inputs
+      if (!trigger || !conditions) return false
+      
+      // Check if trigger is on cooldown
+      if (this.isOnCooldown(trigger.id)) return false
 
-    // Check if trigger has already been fired too many times
-    const history = this.triggerHistory.get(trigger.id) || []
-    if (history.length >= 3) return false // Max 3 times per session
+      // Check if trigger has already been fired too many times
+      const history = this.triggerHistory.get(trigger.id) || []
+      if (history.length >= 3) return false // Max 3 times per session
 
-    // Check all trigger conditions
-    const triggerConditions = trigger.conditions || {}
+      // Check all trigger conditions
+      const triggerConditions = trigger.conditions || {}
 
-    if (triggerConditions.timeOnSite && (!conditions.timeOnSite || conditions.timeOnSite < triggerConditions.timeOnSite)) {
+      if (triggerConditions.timeOnSite && (!conditions.timeOnSite || conditions.timeOnSite < triggerConditions.timeOnSite)) {
+        return false
+      }
+
+      if (triggerConditions.scrollDepth && (!conditions.scrollDepth || conditions.scrollDepth < triggerConditions.scrollDepth)) {
+        return false
+      }
+
+      if (triggerConditions.pageViews && (!conditions.pageViews || conditions.pageViews < triggerConditions.pageViews)) {
+        return false
+      }
+
+      if (triggerConditions.currentSection && conditions.currentSection !== triggerConditions.currentSection) {
+        return false
+      }
+
+      if (triggerConditions.deviceType && conditions.deviceType && !triggerConditions.deviceType.includes(conditions.deviceType[0])) {
+        return false
+      }
+
+      if (triggerConditions.returningVisitor !== undefined && conditions.returningVisitor !== triggerConditions.returningVisitor) {
+        return false
+      }
+
+      if (triggerConditions.interactionCount && (!conditions.interactionCount || conditions.interactionCount < triggerConditions.interactionCount)) {
+        return false
+      }
+
+      if (triggerConditions.exitIntent && !conditions.exitIntent) {
+        return false
+      }
+
+      return true
+    } catch (error) {
+      console.warn(`Error evaluating trigger ${trigger.id}:`, error)
       return false
     }
-
-    if (triggerConditions.scrollDepth && (!conditions.scrollDepth || conditions.scrollDepth < triggerConditions.scrollDepth)) {
-      return false
-    }
-
-    if (triggerConditions.pageViews && (!conditions.pageViews || conditions.pageViews < triggerConditions.pageViews)) {
-      return false
-    }
-
-    if (triggerConditions.currentSection && conditions.currentSection !== triggerConditions.currentSection) {
-      return false
-    }
-
-    if (triggerConditions.deviceType && conditions.deviceType && !triggerConditions.deviceType.includes(conditions.deviceType[0])) {
-      return false
-    }
-
-    if (triggerConditions.returningVisitor !== undefined && conditions.returningVisitor !== triggerConditions.returningVisitor) {
-      return false
-    }
-
-    if (triggerConditions.interactionCount && (!conditions.interactionCount || conditions.interactionCount < triggerConditions.interactionCount)) {
-      return false
-    }
-
-    if (triggerConditions.exitIntent && !conditions.exitIntent) {
-      return false
-    }
-
-    return true
   }
 
   private isOnCooldown(triggerId: string): boolean {
@@ -379,29 +399,140 @@ class PsychologicalTriggerEngine {
       }
     }
   }
+
+  // Memory management and cleanup
+  public cleanup(): void {
+    try {
+      this.activeTriggers.clear()
+      this.triggerHistory.clear()
+      
+      // Reset metrics for fresh session
+      for (const trigger of this.triggers.values()) {
+        trigger.metrics = {
+          impressions: 0,
+          conversions: 0,
+          conversionRate: 0
+        }
+      }
+    } catch (error) {
+      console.error('Error during trigger cleanup:', error)
+    }
+  }
+
+  // Session management
+  public startNewSession(): void {
+    this.cleanup()
+  }
+
+  // Safe trigger management
+  public removeTrigger(triggerId: string): boolean {
+    try {
+      this.activeTriggers.delete(triggerId)
+      this.triggerHistory.delete(triggerId)
+      return this.triggers.delete(triggerId)
+    } catch (error) {
+      console.error(`Error removing trigger ${triggerId}:`, error)
+      return false
+    }
+  }
+
+  // Validate trigger configuration
+  private validateTrigger(trigger: PsychologicalTrigger): boolean {
+    if (!trigger.id || !trigger.name || !trigger.type) {
+      console.warn('Invalid trigger: missing required fields', trigger)
+      return false
+    }
+
+    if (trigger.conditions?.timeOnSite && trigger.conditions.timeOnSite < 0) {
+      console.warn('Invalid trigger: negative timeOnSite', trigger)
+      return false
+    }
+
+    if (trigger.conditions?.scrollDepth && (trigger.conditions.scrollDepth < 0 || trigger.conditions.scrollDepth > 100)) {
+      console.warn('Invalid trigger: invalid scrollDepth', trigger)
+      return false
+    }
+
+    return true
+  }
+
+  // Enhanced addTrigger with validation
+  public addTriggerSafely(trigger: PsychologicalTrigger): boolean {
+    try {
+      if (!this.validateTrigger(trigger)) {
+        return false
+      }
+
+      this.triggers.set(trigger.id, trigger)
+      return true
+    } catch (error) {
+      console.error('Error adding trigger:', error)
+      return false
+    }
+  }
 }
 
-// React hook for psychological triggers
+// React hook for psychological triggers with enhanced error handling
 export function usePsychologicalTriggers() {
   const [engine] = useState(() => new PsychologicalTriggerEngine())
   const [activeTriggers, setActiveTriggers] = useState<TriggerEffect[]>([])
+  const [error, setError] = useState<string | null>(null)
 
   const checkTriggers = useCallback((conditions: TriggerConditions) => {
-    const effects = engine.checkTriggers(conditions)
-    setActiveTriggers(effects)
-    return effects
+    try {
+      setError(null)
+      const effects = engine.checkTriggers(conditions)
+      setActiveTriggers(effects)
+      return effects
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error in trigger system'
+      setError(errorMessage)
+      console.error('Trigger system error:', err)
+      return []
+    }
   }, [engine])
 
   const recordConversion = useCallback((triggerId: string) => {
-    engine['recordConversion'](triggerId)
+    try {
+      engine['recordConversion'](triggerId)
+    } catch (err) {
+      console.error('Error recording conversion:', err)
+    }
   }, [engine])
 
   const getTriggerMetrics = useCallback(() => {
-    return engine.getTriggerMetrics()
+    try {
+      return engine.getTriggerMetrics()
+    } catch (err) {
+      console.error('Error getting trigger metrics:', err)
+      return []
+    }
   }, [engine])
 
   const analyzeTriggerEffectiveness = useCallback(() => {
-    return engine.analyzeTriggerEffectiveness()
+    try {
+      return engine.analyzeTriggerEffectiveness()
+    } catch (err) {
+      console.error('Error analyzing trigger effectiveness:', err)
+      return {
+        topPerformers: [],
+        underPerformers: [],
+        recommendations: ['Error analyzing triggers. Please check console for details.']
+      }
+    }
+  }, [engine])
+
+  const clearError = useCallback(() => {
+    setError(null)
+  }, [])
+
+  const dismissTrigger = useCallback((triggerId: string) => {
+    try {
+      setActiveTriggers(prev => prev.filter(trigger => trigger.id !== triggerId))
+      engine['dismissTrigger'](triggerId)
+    } catch (err) {
+      console.error('Error dismissing trigger:', err)
+    }
   }, [engine])
 
   return {
@@ -410,6 +541,9 @@ export function usePsychologicalTriggers() {
     recordConversion,
     getTriggerMetrics,
     analyzeTriggerEffectiveness,
+    dismissTrigger,
+    error,
+    clearError,
     engine
   }
 }

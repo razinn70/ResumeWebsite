@@ -12,13 +12,15 @@ import {
   Minus,
   RotateCcw
 } from 'lucide-react';
-import { ProjectStructure, GitCommit as GitCommitType } from '../types';
+import { ProjectStructure, GitCommit as GitCommitType, FileSystemNode } from '../types';
 
 interface GitPanelProps {
   project: ProjectStructure;
+  repository?: any; // Support both for backwards compatibility
+  onFileSelect: (file: FileSystemNode) => void;
 }
 
-export const GitPanel: React.FC<GitPanelProps> = ({ project }) => {
+export const GitPanel: React.FC<GitPanelProps> = ({ project, repository, onFileSelect }) => {
   const [activeTab, setActiveTab] = useState<'commits' | 'branches' | 'status'>('commits');
 
   const formatDate = (date: Date) => {
@@ -159,13 +161,14 @@ export const GitPanel: React.FC<GitPanelProps> = ({ project }) => {
             </span>
           </div>
         </div>
-      </div>      {project.git?.remotes && project.git.remotes.length > 0 && (
-        <div>
+      </div>      {project.git?.remotes && project.git.remotes.length > 0 && (        <div>
           <h4 className="text-sm font-medium text-white mb-2">Remote</h4>
           <div className="space-y-1 text-sm">
             <div className="flex justify-between">
               <span className="text-gray-400">Origin:</span>
-              <span className="text-blue-400 truncate">{project.git.remotes[0].url}</span>
+              <span className="text-blue-400 truncate">
+                {project.git?.remotes?.[0]?.url || 'No remote configured'}
+              </span>
             </div>
           </div>
         </div>

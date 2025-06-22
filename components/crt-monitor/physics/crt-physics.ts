@@ -365,44 +365,78 @@ export class CRTPhysicsSimulator {
     return new Vector2(totalField.x * 1000, totalField.y * 1000);
   }
 
-  public degauss(): void {
-    this.physics.magneticField.degaussStrength = 1.0;
-    
-    // Reset some magnetic-related states
-    this.physics.convergence.misconvergence = Math.max(0.001, 
-      this.physics.convergence.misconvergence * 0.1
-    );
-    
-    // Clear some burn-in temporarily
-    for (const [coord, burnIn] of this.physics.phosphor.burnIn.entries()) {
-      if (burnIn < 0.3) {
-        this.physics.phosphor.burnIn.delete(coord);
-      } else {
-        this.physics.phosphor.burnIn.set(coord, burnIn * 0.8);
-      }
-    }
-  }
-
+  // Control methods expected by CRTMonitor
   public setBrightness(value: number): void {
-    this.physics.electronBeam.intensity = MathUtils.clamp(value, 0, 1);
+    this.physics.phosphor.brightness = Math.max(0, Math.min(1, value));
+    // Simulate phosphor response time
+    this.physics.phosphor.lastExcitation.set('brightness', performance.now());
   }
 
   public setContrast(value: number): void {
-    // Contrast affects the beam current modulation
-    this.physics.electronBeam.beamCurrent = MathUtils.clamp(value * 0.8, 0.1, 1.0);
+    // Contrast affects the phosphor efficiency curve
+    this.physics.phosphor.efficiency = Math.max(0.1, Math.min(1, 0.85 * value));
   }
 
-  public getPhysicsState(): CRTPhysics {
-    return { ...this.physics };
+  public degauss(): void {
+    // Simulate degaussing process
+    const degaussTime = performance.now();
+    this.physics.magneticField.degaussStrength = 1.0;
+    
+    // Gradually reduce degauss strength over time
+    setTimeout(() => {
+      this.physics.magneticField.degaussStrength = 0.5;
+    }, 100);
+    
+    setTimeout(() => {
+      this.physics.magneticField.degaussStrength = 0.0;
+      // Reset convergence after degauss
+      this.physics.convergence.red.set(0, 0);
+      this.physics.convergence.green.set(0, 0);
+      this.physics.convergence.blue.set(0, 0);
+    }, 500);
   }
 
-  public reset(): void {
-    this.physics = this.initializePhysics();
-    this.frameCount = 0;
-    this.lastUpdateTime = 0;
+  public getPhysicsState(): Partial<CRTPhysics> {
+    return {
+      electronBeam: { ...this.physics.electronBeam },
+      phosphor: { 
+        ...this.physics.phosphor,
+        burnIn: new Map(this.physics.phosphor.burnIn)
+      },
+      magneticField: { ...this.physics.magneticField },
+      thermal: { ...this.physics.thermal },
+      aging: { ...this.physics.aging },
+      scanlines: { ...this.physics.scanlines },
+      convergence: { ...this.physics.convergence }
+    };
+  }
+
+  public cleanup(): void {
+    // Clear all intervals and timeouts
     this.burnInMap.clear();
+    this.physics.phosphor.burnIn.clear();
+    this.physics.phosphor.lastExcitation.clear();
+    
+    // Reset buffers
     this.scanBuffer.fill(0);
     this.phosphorBuffer.fill(0);
+  }
+
+  public getStats(): Record<string, any> {
+    return {
+      frameCount: this.frameCount,
+      lastUpdateTime: this.lastUpdateTime,
+      memoryUsage: {
+        scanBuffer: this.scanBuffer.byteLength,
+        phosphorBuffer: this.phosphorBuffer.byteLength,
+        burnInEntries: this.burnInMap.size
+      },
+      performance: {
+        avgFrameTime: this.lastUpdateTime / Math.max(1, this.frameCount),
+        phosphorTemperature: this.physics.phosphor.temperature,
+        screenTemperature: this.physics.thermal.screenTemperature
+      }
+    };
   }
 
   // Utility methods for shader uniforms

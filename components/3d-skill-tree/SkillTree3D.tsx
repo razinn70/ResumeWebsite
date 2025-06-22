@@ -288,9 +288,8 @@ export function SkillTree3D({ className = "", showDebug = false }: SkillTree3DPr
             c.name.toLowerCase().includes(categoryName) ||
             c.id.toLowerCase().includes(categoryName)
           )
-          
-          if (category && category.skills.length > 0) {
-            setSelectedSkill(category.skills[0])
+            if (category && category.skills.length > 0) {
+            setSelectedSkill(category.skills[0] || null)
             console.log(`🔓 Unlocked ${category.name} category`)
           } else {
             console.log(`❌ Category '${categoryName}' not found.`)
