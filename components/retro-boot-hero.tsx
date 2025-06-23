@@ -171,10 +171,12 @@ const RetroBootHero = memo(function RetroBootHero({
     fortune: [
       "\"Programs must be written for people to read,",
       "and only incidentally for machines to execute.\"",
-      "- Harold Abelson"    ],
+      "- Harold Abelson"
+    ],
     hello: ["Hello, World! Welcome to my terminal."],
     clear: [],
   }
+
   useEffect(() => {
     if (currentStep < bootSequence.length) {
       const timer = setTimeout(() => {
@@ -186,15 +188,10 @@ const RetroBootHero = memo(function RetroBootHero({
       }, currentStep < 12 ? 200 : 600) // Faster boot, slower intro
       
       return () => clearTimeout(timer)
-    }
-    
-    // Handle case when boot sequence is complete
-    if (!isInteractive) {
+    } else {
       setIsInteractive(true)
     }
-    
-    return undefined // Explicit return for completed boot sequence
-  }, [currentStep, bootSequence.length, name, bootSequence, isInteractive])
+  }, [currentStep, bootSequence.length, name, bootSequence])
 
   const handleCommand = (input: string) => {
     const command = input.toLowerCase().trim()

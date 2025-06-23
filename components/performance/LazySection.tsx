@@ -21,13 +21,13 @@ export function LazySection({
   const [isVisible, setIsVisible] = useState(false)
   const [hasBeenVisible, setHasBeenVisible] = useState(false)
   const elementRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined') return
 
     const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0];
-        if (entry?.isIntersecting && !hasBeenVisible) {
+      ([entry]) => {
+        if (entry.isIntersecting && !hasBeenVisible) {
           setIsVisible(true)
           setHasBeenVisible(true)
         }

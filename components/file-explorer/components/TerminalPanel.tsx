@@ -97,7 +97,8 @@ export const TerminalPanel: React.FC<TerminalPanelProps> = ({ project, height })
     content: string, 
     type: TerminalOutput['type'] = 'output',
     exitCode?: number
-  ) => {    setSessions(prev => prev.map(session => 
+  ) => {
+    setSessions(prev => prev.map(session => 
       session.id === sessionId
         ? {
             ...session,
@@ -106,7 +107,7 @@ export const TerminalPanel: React.FC<TerminalPanelProps> = ({ project, height })
               type,
               content,
               timestamp: new Date(),
-              ...(exitCode !== undefined && { exitCode })
+              exitCode
             }]
           }
         : session
@@ -308,21 +309,20 @@ export const TerminalPanel: React.FC<TerminalPanelProps> = ({ project, height })
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
-      executeCommand(currentCommand);    } else if (e.key === 'ArrowUp') {
+      executeCommand(currentCommand);
+    } else if (e.key === 'ArrowUp') {
       e.preventDefault();
       if (commandHistory.length > 0) {
         const newIndex = Math.min(historyIndex + 1, commandHistory.length - 1);
         setHistoryIndex(newIndex);
-        const command = commandHistory[commandHistory.length - 1 - newIndex];
-        setCurrentCommand(command || '');
+        setCurrentCommand(commandHistory[commandHistory.length - 1 - newIndex]);
       }
     } else if (e.key === 'ArrowDown') {
       e.preventDefault();
       if (historyIndex > 0) {
         const newIndex = historyIndex - 1;
         setHistoryIndex(newIndex);
-        const command = commandHistory[commandHistory.length - 1 - newIndex];
-        setCurrentCommand(command || '');
+        setCurrentCommand(commandHistory[commandHistory.length - 1 - newIndex]);
       } else if (historyIndex === 0) {
         setHistoryIndex(-1);
         setCurrentCommand('');

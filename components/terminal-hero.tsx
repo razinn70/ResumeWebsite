@@ -76,6 +76,7 @@ export function TerminalHero({
     ],
     clear: [],
   }
+
   useEffect(() => {
     if (currentStep < bootSequence.length) {
       const timer = setTimeout(() => {
@@ -83,15 +84,10 @@ export function TerminalHero({
       }, currentStep < 6 ? 300 : 800) // Faster for boot messages, slower for intro
       
       return () => clearTimeout(timer)
-    }
-    
-    // Handle case when boot sequence is complete
-    if (!isInteractive) {
+    } else {
       setIsInteractive(true)
     }
-    
-    return undefined // Explicit return for completed sequence
-  }, [currentStep, bootSequence.length, isInteractive])
+  }, [currentStep, bootSequence.length])
 
   const handleCommand = (input: string) => {
     const command = input.toLowerCase().trim()
